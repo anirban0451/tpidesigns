@@ -1,4 +1,22 @@
-weights_formulate = function(w = 1, x, n, a1 = 1, a2= 1, b1 = 1, b2 = 1)
+#' Posterior distribution parameters for mixture priors
+#'
+#' \code{weights_formulate} calculates posterior distribution paramters for a Binomial likelihood and mixture Beta prior
+#'
+#' @param w Weight on the informative prior (Distribution coming from a belief)
+#' @param x Total Number of events
+#' @param n Trial size
+#' @param a1 alpha parameter for informative distribution
+#' @param b1 beta parameter for informative distribution
+#' @param a2 alpha parameter for non informative distribution
+#' @param b2 beta parameter for non informative distribution
+#'
+#' @return \code{weights}  Weights on posterior distribution components. The first value refers to the weight for informative part of the posterior distribution.
+#' @return \code{param_inform}  Parameters (alpha, beta) for the informative distribution
+#' @return \code{param_noninform}  Parameters (alpha, beta) for the non informative distribution
+#' @export
+#'
+#' @examples weights_formulate(w = 1, x = 1, n = 3, a1 = 1, b1= 1, a2 = 1, b2 = 1)
+weights_formulate = function(w = 1, x, n, a1 = 1, b1= 1, a2 = 1, b2 = 1)
 {
   #Checking the value of weight
 
