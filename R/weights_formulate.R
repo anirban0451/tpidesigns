@@ -38,6 +38,11 @@ weights_formulate = function(w = 1, x, n, a1 = 1, b1= 1, a2 = 1, b2 = 1)
 
   #Checking the number of events happened is less than total number of trials
 
+  if (n < 1)
+  {
+    stop("The trial size must be at least 1")
+  }
+
   if(x > n)
   {
     stop("Number of successes for the event (i.e. experiencing DLT 's) must be lower than total number of trials (i.e. patients treated)")
