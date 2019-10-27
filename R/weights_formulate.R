@@ -31,7 +31,7 @@ weights_formulate = function(w = 1, x, n, a1 = 1, b1= 1, a2 = 1, b2 = 1)
 
   #Checking the eligibility of the parameters
 
-  if (a1 < 0 || b1 < 0 || a2 < 0 || b2 <0)
+  if (a1 <= 0 || b1 <= 0 || a2 <= 0 || b2 <= 0)
   {
     stop("Beta parameters can not be negative")
   }
