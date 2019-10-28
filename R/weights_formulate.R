@@ -22,30 +22,30 @@ weights_formulate = function(w = 1, x, n, a1 = 1, b1= 1, a2 = NULL, b2 = NULL)
 {
   #Checking the value of weight
 
-  if (w > 1)
+  if (isTRUE(w > 1))
   {
     stop("Weight on informative prior can be at most 1")
   }
-  else if (w < 0)
+  else if (isTRUE(w < 0))
   {
     stop("Weight on a prior can not be negative")
   }
 
   #Checking the eligibility of the parameters
 
-  if (sum(c(a1, b1, a2, b2) <= 0) > 0)
+  if (isTRUE(sum(c(a1, b1, a2, b2) <= 0) > 0))
   {
     stop("Beta parameters must be non-negative")
   }
 
   #Checking the number of events happened is less than total number of trials
 
-  if (n < 1)
+  if (isTRUE(n < 1))
   {
     stop("The trial size must be at least 1")
   }
 
-  if(x > n)
+  if(isTRUE(x > n))
   {
     stop("Number of successes for the event (i.e. experiencing DLT 's) must be lower than total number of trials (i.e. patients treated)")
   }
@@ -57,20 +57,20 @@ weights_formulate = function(w = 1, x, n, a1 = 1, b1= 1, a2 = NULL, b2 = NULL)
   b2_null = is.null(b2)
   total_null = a1_null + b1_null + a2_null + b2_null
 
-  if (total_null == 4)
+  if (isTRUE(total_null == 4))
   {
     stop("Please input a1, a2, b1, b2 properly. ")
   }
 
   if(w %in% c(0, 1))
   {
-    if (total_null == 2)
+    if (isTRUE(total_null == 2))
     {
-      if((a2_null + b2_null) == 1)
+      if(isTRUE((a2_null + b2_null) == 1))
       {
         stop("Please input either both a1 and b1, or both a2 and b2, (ai,bi) is the pair of parameters. For Uniform Distribution, either put a1 = 1, b1 = 1, or put, a2 = 1 and b2 = 1")
       }
-      else if ((a2_null + b2_null) == 0)
+      else if (isTRUE((a2_null + b2_null) == 0))
       {
         a1 = a2
         b1 = b2
@@ -81,14 +81,14 @@ weights_formulate = function(w = 1, x, n, a1 = 1, b1= 1, a2 = NULL, b2 = NULL)
     {
       stop("Please input a1, b1, a2, b2 properly, (ai,bi) is the pair of parameters. For Uniform Distribution, either put a1 = 1, b1 = 1, or put, a2 = 1 and b2 = 1")
     }
-    else if (total_null == 0)
+    else if (isTRUE(total_null == 0))
     {
       warning("Check inputs for prior parameters, taking a1 and b1 as original parameters")
     }
   }
   else
   {
-    if (total_null > 0 )
+    if (isTRUE(total_null > 0) )
     {
       stop("Please input model parameters  for both priors properly")
     }

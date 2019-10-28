@@ -21,23 +21,23 @@
 UPM <- function(w, a = 0, b = 1, a1 = NULL, b1 = NULL, a2 = NULL, b2 = NULL)
 {
   #Checking if the weight value is at most 1 or at least 0
-  if(w < 0 || w >1)
+  if(isTRUE(w < 0 || w > 1))
   {
     stop("w is weight taken on first prior (informative), which can lie between 0 and 1")
   }
 
   #Checking the feasibility of the domain
-  if(a < 0)
+  if(isTRUE(a < 0))
   {
     a = 0
     warning("Domain of Beta distribution is (0,1), changing a to 0")
   }
-  if(b > 1)
+  if(isTRUE(b > 1))
   {
     b = 1
     warning("Domain of Beta distribution is (0,1), changing a to 1")
   }
-  if(a >= b) stop("a must be less than b and both should lie within (0,1")
+  if(isTRUE(a >= b)) stop("a must be less than b and both should lie within (0,1")
   #Checking feasibility condition of prior parameters
   a1_null = is.null(a1)
   b1_null = is.null(b1)
@@ -45,20 +45,20 @@ UPM <- function(w, a = 0, b = 1, a1 = NULL, b1 = NULL, a2 = NULL, b2 = NULL)
   b2_null = is.null(b2)
   total_null = a1_null + b1_null + a2_null + b2_null
 
-  if (total_null == 4)
+  if (isTRUE(total_null == 4))
   {
     stop("Please input a1, a2, b1, b2 properly. ")
   }
   #Checking the over toxicity of the dose
   if(w %in% c(0, 1))
   {
-    if (total_null == 2)
+    if (isTRUE(total_null == 2))
     {
-      if((a2_null + b2_null) == 1)
+      if(isTRUE((a2_null + b2_null) == 1))
       {
         stop("Please input either both a1 and b1, or both a2 and b2, (ai,bi) is the pair of parameters. For Uniform Distribution, either put a1 = 1, b1 = 1, or put, a2 = 1 and b2 = 1")
       }
-      else if ((a2_null + b2_null) == 0)
+      else if (isTRUE((a2_null + b2_null) == 0))
       {
         a1 = a2
         b1 = b2
@@ -69,14 +69,14 @@ UPM <- function(w, a = 0, b = 1, a1 = NULL, b1 = NULL, a2 = NULL, b2 = NULL)
     {
       stop("Please input a1, b1, a2, b2 properly, (ai,bi) is the pair of parameters. For Uniform Distribution, either put a1 = 1, b1 = 1, or put, a2 = 1 and b2 = 1")
     }
-    else if (total_null == 0)
+    else if (isTRUE(total_null == 0))
     {
       warning("Check inputs for prior parameters, taking a1 and b1 as original parameters")
     }
   }
   else
   {
-    if (total_null > 0 )
+    if (isTRUE(total_null > 0))
     {
       stop("Please input model parameters properly")
     }

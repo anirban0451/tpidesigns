@@ -22,21 +22,21 @@
 decisiontpi <- function(pt, e1 = 0.05, e2 = 0.05, x, n, eta, design = c("tpi", "mtpi", "mmtpi"), w, a1 = NULL, b1 = NULL, a2 = NULL, b2 = NULL)
 {
   #Checking feasibility conditions for pt, e1 and e2
-  if(pt > 1 || pt < 0)
+  if(isTRUE(pt > 1 || pt < 0))
   {
     stop("Target toxicity Probability should take values between 0 and 1")
   }
-  if(pt - e1 < 0 || pt + e2 > 1)
+  if(isTRUE(pt - e1 < 0 || pt + e2 > 1))
   {
     stop ("e1 and e2, two thresholds should be small compared to the target probability pt")
   }
 
   #checking feasibility condition for x and n
-  if(n < 0)
+  if(isTRUE(n < 0))
   {
     stop ("n, total number of patients in a cohort must be positive")
   }
-  if (x > n)
+  if (isTRUE(x > n))
   {
     stop("Number of patients experiencing DLT 's must be less than or equal to total number of patients treated in that cohort.")
   }
@@ -46,7 +46,12 @@ decisiontpi <- function(pt, e1 = 0.05, e2 = 0.05, x, n, eta, design = c("tpi", "
   if (w %in% c(0,1))
   {
     threshold = pbeta(pt, a1 + x, b1 + n - x, lower.tail = FALSE)
-    if (threshold >= eta)return("DU")
+    if(isTRUE(threshold >= eta)) {return("DU")}
+    else
+    {
+      a1 = a1 + x
+      b1 = b1 + n - x
+    }
   }
   else
   {
@@ -58,10 +63,7 @@ decisiontpi <- function(pt, e1 = 0.05, e2 = 0.05, x, n, eta, design = c("tpi", "
     b2 = params$param_noninform[2]
     threshold = w * pbeta(pt, a1 + x, b1 + n - x, lower.tail = FALSE) +
                          (1 - w) * pbeta(pt, a2 + x, b2 + n - x, lower.tail = FALSE)
-    if(threshold >= eta)
-    {
-      return("DU")
-    }
+    if(isTRUE(threshold >= eta)){return("DU")}
   }
 
 
@@ -105,11 +107,11 @@ decisiontpi <- function(pt, e1 = 0.05, e2 = 0.05, x, n, eta, design = c("tpi", "
     }
     max_upm = max(upm_array)
     location = which.max(upm_array)
-    if(interval[location] < (pt - e1))
+    if(isTRUE(interval[location] < (pt - e1)))
     {
       return("E")
     }
-    else if (interval[location] == (pt - e1))
+    else if (isTRUE(interval[location] == (pt - e1)))
     {
       return("S")
     }
