@@ -20,48 +20,33 @@ decisiontpi <- function(pt, e1 = 0.05, e2 = 0.05, x, n, eta, design = c("tpi", "
     stop("Number of patients experiencing DLT 's must be less than or equal to total number of patients treated in that cohort.")
   }
 
-  #Checking feasibility condition of prior parameters
-  a1_null = is.null(a1)
-  b1_null = is.null(b1)
-  a2_null = is.null(a2)
-  b2_null = is.null(b2)
-  total_null = a1_null + b1_null + a2_null + b2_null
-
-  if (total_null == 4)
+  if (w %in% c(0,1) && isTRUE(pbeta(pt, a1 + x, b1 + n -x, lower.tail = FALSE) > eta))
   {
-    stop("Please input a1, a2, b1, b2 properly. ")
+    return("DU")
   }
-  #Checking the over toxicity of the dose
-  if(w %in% c(0, 1))
+  else
   {
-    if (total_null == 2)
-    {
-      if((a2_null + b2_null) == 1)
-      {
-        stop("Please input either both a1 and b1, or both a2 and b2, (ai,bi) is the pair of parameters. For Uniform Distribution, either put a1 = 1, b1 = 1, or put, a2 = 1 and b2 = 1")
-      }
-      else if ((a2_null + b2_null) == 0)
-      {
-        a1 = a2
-        b1 = b2
-        warning("You should put the parameter values for a1 and b1 instead of a2 and b2")
-      }
-    }
-    else if (total_null %in% c(1,3))
-    {
-      stop("Please input a1, b1, a2, b2 properly, (ai,bi) is the pair of parameters. For Uniform Distribution, either put a1 = 1, b1 = 1, or put, a2 = 1 and b2 = 1")
-    }
-    else if (total_null == 0)
-    {
-      warning("Check inputs for prior parameters, taking a1 and b1 as original parameters")
-    }
-
-    #Calculation of Decision for w = 1
-
-    if(pbeta(pt, a1 + x, b1 + n - x, lower.tail = FALSE) > eta)
+    params = weights_formulate(w = w, x = x, n = n, a1 = a1, a2 = a2, b1 = b1, b2 = b2)
+    w = params$weight
+    a1 = params$param_inform[1]
+    b1 = params$param_inform[2]
+    a2 = params$param_noninform[1]
+    b2 = params$param_noninform[2]
+    if(isTRUE(w * pbeta(pt, a1 + x, b1 + n - x, lower.tail = FALSE) +
+              (1 - w) * pbeta(pt, a2 + x, b2 + n - x, lower.tail = FALSE)> eta))
     {
       return("DU")
     }
+  }
+
+  #breaking up the domain in compatible ranges according to Professor Yuan Ji 's paper
+  if (design %in% c("tpi", "mtpi"))
+  {
+    interval = c(0, pt - e1, pt + e2)
+  }
+  else
+  {
+    breaks_lower = floor((pt - e1) / 0.1)
   }
 
 }
