@@ -4,7 +4,8 @@
 \alias{UPM}
 \title{Calculation of Unit Probability Mass}
 \usage{
-UPM(w, a = 0, b = 1, a1 = 1, b1 = 1, a2 = 1, b2 = 1)
+UPM(w, a = 0, b = 1, a1 = NULL, b1 = NULL, a2 = NULL,
+  b2 = NULL)
 }
 \arguments{
 \item{w}{Weight on the first component of mixture distribution, i.e, the informative Prior}
