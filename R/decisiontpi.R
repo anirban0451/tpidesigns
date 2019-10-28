@@ -1,22 +1,24 @@
-#' Title
+#' Dosing Decisions based on different tpi designs
 #'
-#' @param pt
-#' @param e1
-#' @param e2
-#' @param x
-#' @param n
-#' @param eta
-#' @param design
-#' @param w
-#' @param a1
-#' @param b1
-#' @param a2
-#' @param b2
-#'
+#' \code{decisiontpi} gives whether to escalate, stay or de-escalate to a level of Dose given total number of patients and total number of people experiencing toxicities in a cohort
+#' @param pt Target toxicity proportion to achieve in the sample (lower toxicity implies underdosing)
+#' @param e1 Allowable deviation towards the left of target toxicity \code{pt}, usually lies between 0 to 0.05
+#' @param e2 Allowable deviation towards the right of target toxicity \code{pt}, usually lies between 0 to 0.05
+#' @param x Number of patients experiencing DLT (Dose Limiting Toxicity) 's in the cohort
+#' @param n Total number of patients in the cohort
+#' @param eta threshold value to check if the Dose is severely toxic
+#' @param design Design parameter, tells us which design to use. Options are \code{"tpi", "mtpi", "mmtpi"}
+#' @param w weight on the informative prior
+#' @param a1,b1 alpha and beta parameters for informative Beta Prior component
+#' @param a2,b2 alpha and Beta parameters for noninformative Beta Prior component
 #' @return
+#' \code{"E"} We should increase the current level of Dose.\cr
+#' \code{"S"} We should stay at the current level of Dose and treat more patients.\cr
+#' \code{"D"} We should decrease the current level of Dose.\cr
+#' \code{"DU"} We should decrease the current level of Dose and we should not go beyond this Dose level for treating more patients\cr
 #' @export
 #'
-#' @examples
+#'
 decisiontpi <- function(pt, e1 = 0.05, e2 = 0.05, x, n, eta, design = c("tpi", "mtpi", "mmtpi"), w, a1 = NULL, b1 = NULL, a2 = NULL, b2 = NULL)
 {
   #Checking feasibility conditions for pt, e1 and e2
@@ -43,7 +45,7 @@ decisiontpi <- function(pt, e1 = 0.05, e2 = 0.05, x, n, eta, design = c("tpi", "
   threshold = 0
   if (w %in% c(0,1))
   {
-    threshold = pbeta(pt, a1 + x, b1 + n -x, lower.tail = FALSE)
+    threshold = pbeta(pt, a1 + x, b1 + n - x, lower.tail = FALSE)
     if (threshold >= eta)return("DU")
   }
   else

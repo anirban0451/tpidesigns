@@ -4,7 +4,8 @@
 \alias{weights_formulate}
 \title{Posterior distribution parameters for mixture priors}
 \usage{
-weights_formulate(w = 1, x, n, a1 = 1, b1 = 1, a2 = 1, b2 = 1)
+weights_formulate(w = 1, x, n, a1 = 1, b1 = 1, a2 = NULL,
+  b2 = NULL)
 }
 \arguments{
 \item{w}{Weight on the informative prior (Distribution coming from a belief)}
@@ -13,13 +14,13 @@ weights_formulate(w = 1, x, n, a1 = 1, b1 = 1, a2 = 1, b2 = 1)
 
 \item{n}{Trial size}
 
-\item{a1}{alpha parameter for informative distribution}
+\item{a1}{alpha parameter for informative distribution, must be input properly when \eqn{w = 0 or 1}}
 
-\item{b1}{beta parameter for informative distribution}
+\item{b1}{beta parameter for informative distribution, must be input properly properly when \eqn{w = 0 or 1}}
 
-\item{a2}{alpha parameter for non informative distribution}
+\item{a2}{alpha parameter for non informative distribution, will not be used if \eqn{w = 0 or 1}}
 
-\item{b2}{beta parameter for non informative distribution}
+\item{b2}{beta parameter for non informative distribution, will not be used if \eqn{w = 0 or 1}}
 }
 \value{
 \code{weights}  Weights on posterior distribution components. The first value refers to the weight for informative part of the posterior distribution.
@@ -30,6 +31,9 @@ weights_formulate(w = 1, x, n, a1 = 1, b1 = 1, a2 = 1, b2 = 1)
 }
 \description{
 \code{weights_formulate} calculates posterior distribution paramters for a Binomial likelihood and mixture Beta prior
+}
+\details{
+When w takes the value 0 or 1, which implies existence of a single Prior Beta distribution, \code{weights_formulate} by default takes a1 and b1 as model parameters.
 }
 \examples{
 weights_formulate(w = 1, x = 1, n = 3, a1 = 1, b1= 1, a2 = 1, b2 = 1)
