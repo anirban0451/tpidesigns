@@ -1,3 +1,22 @@
+#' Title
+#'
+#' @param pt
+#' @param e1
+#' @param e2
+#' @param x
+#' @param n
+#' @param eta
+#' @param design
+#' @param w
+#' @param a1
+#' @param b1
+#' @param a2
+#' @param b2
+#'
+#' @return
+#' @export
+#'
+#' @examples
 decisiontpi <- function(pt, e1 = 0.05, e2 = 0.05, x, n, eta, design = c("tpi", "mtpi", "mmtpi"), w, a1 = NULL, b1 = NULL, a2 = NULL, b2 = NULL)
 {
   #Checking feasibility conditions for pt, e1 and e2
