@@ -72,13 +72,27 @@ decisiontpi <- function(pt, e1 = 0.05, e2 = 0.05, x, n, eta, design = c("tpi", "
   {
     interval = c(0, pt - e1, pt + e2 , 1)
     length_interval = length(interval)
-    upm_array = rep(0, length_interval - 1)
-    for (i  in 1:(length_interval - 1))
+    if(isTRUE(design == "mtpi"))
     {
-      upm_array[i] = UPM(w = w, a1 = a1, a2 = a2, b1 = b1, b2 = b2, a = interval[i], b = interval[i + 1])
+      #Developing mTPI based Dose calculations
+      upm_array = rep(0, length_interval - 1)
+      for (i  in 1:(length_interval - 1))
+      {
+        upm_array[i] = UPM(w = w, a1 = a1, a2 = a2, b1 = b1, b2 = b2, a = interval[i], b = interval[i + 1])
+      }
+      max_upm = max(upm_array)
+      location = which.max(upm_array)
     }
-    max_upm = max(upm_array)
-    location = which.max(upm_array)
+    else
+    {
+      #Developing TPI based Dose Calculations
+      prob_array = rep(0, length_interval - 1)
+      for (i in 1:(length_interval - 1))
+      {
+        prob_array[i] = (interval[i + 1] - interval[i]) * UPM(w = w, a = interval[i], b = interval[i + 1], a1 = a1, b1 = b1, a2 = a2, b2 = b2)
+      }
+      location = which.max(prob_array)
+    }
     if(location == 1)
     {
       return("E")
