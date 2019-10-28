@@ -5,18 +5,20 @@
 #' @param w Weight on the informative prior (Distribution coming from a belief)
 #' @param x Total Number of events
 #' @param n Trial size
-#' @param a1 alpha parameter for informative distribution
-#' @param b1 beta parameter for informative distribution
-#' @param a2 alpha parameter for non informative distribution
-#' @param b2 beta parameter for non informative distribution
+#' @param a1 alpha parameter for informative distribution, must be input properly when \eqn{w = 0 or 1}
+#' @param b1 beta parameter for informative distribution, must be input properly properly when \eqn{w = 0 or 1}
+#' @param a2 alpha parameter for non informative distribution, will not be used if \eqn{w = 0 or 1}
+#' @param b2 beta parameter for non informative distribution, will not be used if \eqn{w = 0 or 1}
 #'
+#' @details
+#' When w takes the value 0 or 1, which implies existence of a single Prior Beta distribution, \code{weights_formulate} by default takes a1 and b1 as model parameters.
 #' @return \code{weights}  Weights on posterior distribution components. The first value refers to the weight for informative part of the posterior distribution.
 #' @return \code{param_inform}  Parameters (alpha, beta) for the informative distribution
 #' @return \code{param_noninform}  Parameters (alpha, beta) for the non informative distribution
 #' @export
 #'
 #' @examples weights_formulate(w = 1, x = 1, n = 3, a1 = 1, b1= 1, a2 = 1, b2 = 1)
-weights_formulate = function(w = 1, x, n, a1 = 1, b1= 1, a2 = 1, b2 = 1)
+weights_formulate = function(w = 1, x, n, a1 = 1, b1= 1, a2 = NULL, b2 = NULL)
 {
   #Checking the value of weight
 
@@ -31,9 +33,9 @@ weights_formulate = function(w = 1, x, n, a1 = 1, b1= 1, a2 = 1, b2 = 1)
 
   #Checking the eligibility of the parameters
 
-  if (a1 <= 0 || b1 <= 0 || a2 <= 0 || b2 <= 0)
+  if (sum(c(a1, b1, a2, b2) <= 0) > 0)
   {
-    stop("Beta parameters can not be negative")
+    stop("Beta parameters must be non-negative")
   }
 
   #Checking the number of events happened is less than total number of trials
@@ -48,18 +50,56 @@ weights_formulate = function(w = 1, x, n, a1 = 1, b1= 1, a2 = 1, b2 = 1)
     stop("Number of successes for the event (i.e. experiencing DLT 's) must be lower than total number of trials (i.e. patients treated)")
   }
 
-  #Calculating parameters based on extreme weights
+  #Checking feasibility condition of prior parameters
+  a1_null = is.null(a1)
+  b1_null = is.null(b1)
+  a2_null = is.null(a2)
+  b2_null = is.null(b2)
+  total_null = a1_null + b1_null + a2_null + b2_null
 
-  if (w == 1)
+  if (total_null == 4)
   {
-    param_inform = c(a1 + x, b1 + n - x)
-    param_noninform = c(0, 0)
+    stop("Please input a1, a2, b1, b2 properly. ")
   }
 
-  else if (w == 0)
+  if(w %in% c(0, 1))
   {
-    param_inform = c(0,0)
-    param_noninform = c(a2 + x, b2 + n - x)
+    if (total_null == 2)
+    {
+      if((a2_null + b2_null) == 1)
+      {
+        stop("Please input either both a1 and b1, or both a2 and b2, (ai,bi) is the pair of parameters. For Uniform Distribution, either put a1 = 1, b1 = 1, or put, a2 = 1 and b2 = 1")
+      }
+      else if ((a2_null + b2_null) == 0)
+      {
+        a1 = a2
+        b1 = b2
+        warning("You should put the parameter values for a1 and b1 instead of a2 and b2")
+      }
+    }
+    else if (total_null %in% c(1,3))
+    {
+      stop("Please input a1, b1, a2, b2 properly, (ai,bi) is the pair of parameters. For Uniform Distribution, either put a1 = 1, b1 = 1, or put, a2 = 1 and b2 = 1")
+    }
+    else if (total_null == 0)
+    {
+      warning("Check inputs for prior parameters, taking a1 and b1 as original parameters")
+    }
+  }
+  else
+  {
+    if (total_null > 0 )
+    {
+      stop("Please input model parameters  for both priors properly")
+    }
+  }
+
+  #Calculating parameters based on extreme weights
+
+  if (w %in% c(0, 1))
+  {
+    param_inform = c(a1 + x, b1 + n - x)
+    param_noninform = c(NULL, NULL)
   }
 
   #tackling general case
@@ -68,13 +108,13 @@ weights_formulate = function(w = 1, x, n, a1 = 1, b1= 1, a2 = 1, b2 = 1)
   {
     param_inform = c(a1 + x, n - x + b1)
     param_noninform = c(a2 + x, n - x + b2)
-    w = (w *( beta(a1 + x, b1 + n - x)/beta(a1, b1)))/
-      (w *( beta(a1 + x, b1 + n - x)/beta(a1, b1)) +
-         (1 - w) *( beta(a2 + x, b2 + n - x)/beta(a2, b2)))
+    w = (w  * (beta(a1 + x, b1 + n - x) / beta(a1, b1))) /
+      (w * (beta(a1 + x, b1 + n - x) / beta(a1, b1)) +
+         (1 - w) * (beta(a2 + x, b2 + n - x) / beta(a2, b2)))
   }
 
   ls = list()
-  ls$weights = c(w, 1 - w)
+  ls$weight = w
   ls$param_inform = param_inform
   ls$param_noninform = param_noninform
   return(ls)
