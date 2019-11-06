@@ -100,6 +100,24 @@ UPM <- function(w, a = 0, b = 1, a1 = NULL, b1 = NULL, a2 = NULL, b2 = NULL)
 
 
 require(ggplot2)
+#' Title
+#'
+#' @param x
+#' @param n
+#' @param pt
+#' @param e1
+#' @param e2
+#' @param design
+#' @param w
+#' @param a1
+#' @param b1
+#' @param a2
+#' @param b2
+#'
+#' @return
+#' @export
+#'
+#' @examples
 upmplot <- function(x , n , pt, e1 = 0.05, e2 = 0.05, design = c("mtpi", "mmtpi"), w, a1, b1, a2, b2)
 {
   if (isTRUE(w > 1))
