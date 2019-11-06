@@ -30,9 +30,9 @@ decisiontpi(pt, e1 = 0.05, e2 = 0.05, x, n, eta, design = c("tpi",
 }
 \value{
 \code{"E"} We should increase the current level of Dose.\cr
-\code{"S"} We should stay at the current level of Dose and treat more patients.
-\code{"D"} We should decrease the current level of Dose.
-\code{"DU"} We should decrease the current level of Dose and we should not go beyond this Dose level for treating more patients
+\code{"S"} We should stay at the current level of Dose and treat more patients.\cr
+\code{"D"} We should decrease the current level of Dose.\cr
+\code{"DU"} We should decrease the current level of Dose and we should not go beyond this Dose level for treating more patients\cr
 }
 \description{
 \code{decisiontpi} gives whether to escalate, stay or de-escalate to a level of Dose given total number of patients and total number of people experiencing toxicities in a cohort

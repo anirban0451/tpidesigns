@@ -2,5 +2,6 @@
 
 export(UPM)
 export(decisiontpi)
+export(tpitable)
 export(weights_formulate)
 importFrom(stats,pbeta)

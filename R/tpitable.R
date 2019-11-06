@@ -1,3 +1,21 @@
+#' Title
+#'
+#' @param nmax A
+#' @param design B
+#' @param pt C
+#' @param e1 D
+#' @param e2 E
+#' @param eta F
+#' @param w G
+#' @param a1 H
+#' @param b1 T
+#' @param a2 G
+#' @param b2 G
+#'
+#' @return g
+#' @export
+#'
+#'
 tpitable = function(nmax, design, pt, e1 = 0.05, e2 = 0.05, eta, w, a1 = NULL, b1 = NULL, a2 = NULL, b2 = NULL)
 {
   if(isTRUE(nmax < 3))
