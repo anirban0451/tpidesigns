@@ -3,5 +3,8 @@
 export(UPM)
 export(decisiontpi)
 export(tpitable)
+export(upmplot)
 export(weights_formulate)
+import(ggplot2)
+importFrom(stats,dbeta)
 importFrom(stats,pbeta)

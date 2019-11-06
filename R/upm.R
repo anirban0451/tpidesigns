@@ -99,26 +99,29 @@ UPM <- function(w, a = 0, b = 1, a1 = NULL, b1 = NULL, a2 = NULL, b2 = NULL)
 
 
 
-require(ggplot2)
-#' Title
+#' Graphical plot of Unit Probability MASS
 #'
-#' @param x
-#' @param n
-#' @param pt
-#' @param e1
-#' @param e2
-#' @param design
-#' @param w
-#' @param a1
-#' @param b1
-#' @param a2
-#' @param b2
+#' \code{upmplot} Produces a graphical plot of Unit Probability Mass for a given set of parameters.
+#' @importFrom stats dbeta
+#' @import ggplot2
+#' @param x a
+#' @param n b
+#' @param pt c
+#' @param e1 d
+#' @param e2 e
+#' @param design f
+#' @param w g
+#' @param a1 h
+#' @param b1 i
+#' @param a2 j
+#' @param b2 k
 #'
-#' @return
+#' @return A graph that includes Probability Distributions of the Dose Limiting Toxocity Rate.
 #' @export
 #'
-#' @examples
-upmplot <- function(x , n , pt, e1 = 0.05, e2 = 0.05, design = c("mtpi", "mmtpi"), w, a1, b1, a2, b2)
+#' @examples require(ggplot2)
+#' @examples upmplot(x = 5, n = 7, pt = 0.3, design = "mmtpi", w = 0.1, a1 = 1, a2 = 1, b1 = 4, b2 = 6)
+upmplot <- function(x , n , pt, e1 = 0.05, e2 = 0.05, design = c("mtpi", "mmtpi"), w, a1 = NULL, b1 = NULL, a2 = NULL, b2 = NULL)
 {
   if (isTRUE(w > 1))
   {
@@ -131,7 +134,7 @@ upmplot <- function(x , n , pt, e1 = 0.05, e2 = 0.05, design = c("mtpi", "mmtpi"
 
   #Checking the eligibility of the parameters
 
-  if (isTRUE(sum(c(a1, b1, a2, b2) <= 0) > 0))
+  if (isTRUE(any(c(a1, b1, a2, b2) <= 0) == TRUE))
   {
     stop("Beta parameters must be non-negative")
   }
@@ -231,9 +234,12 @@ upmplot <- function(x , n , pt, e1 = 0.05, e2 = 0.05, design = c("mtpi", "mmtpi"
   }
   plotupm_addY <- plotupm + geom_vline(xintercept = interval, linetype="dashed", color = "steelblue", size = 0.7)
 
-  segment_data = data.frame(x = interval[-length_interval], y = upm_array, xend = interval[-1],yend = upm_array)
+  segment_x <- interval[-length_interval]
+  segment_xend <- interval[-1]
+  segment_y <- segment_yend <- upm_array
+  segment_data <- data.frame(x = segment_x, y = segment_y, x_end = segment_xend,y_end = segment_yend)
   plotupm_addsegments <- plotupm_addY +
-    geom_segment(data = segment_data, mapping = aes(x = x, xend = xend, y = y, yend = yend))
+    geom_segment(data = segment_data, mapping = aes(x = x, xend = segment_data$x_end, y = segment_data$y, yend = segment_data$y_end))
 
   plotupm_addfootnote <- plotupm_addsegments +
     labs(title = " Plotting of UPM values and Posterior DLT distribution", x = "DLT Rate", y = "Unit Probability Mass (UPM)",
