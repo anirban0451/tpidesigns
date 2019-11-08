@@ -2,22 +2,26 @@
 #'
 #' \code{UPM} calculates Unit Probability Mass for an interval (a, b) when the Underlying distribution is beta or mixture of two beta distributions.
 #' @importFrom stats pbeta
-#' @param w Weight on the first component of mixture distribution, i.e, the informative Prior
-#' @param a,b Range Parameters
-#' @param a1,b1 alpha and beta parameters for informative prior component, must be input when w equals 1
-#' @param a2,b2 alpha and beta parameters for noninformative prior component, must be input when w equals 0
+#' @param a,b Range Parameters between which UPM is needed to be calculated.
+#' @param w,a1,b1,a2,b2 Parameters for Prior Distribution. See \code{\link{weights_formulate}} for more information
 #'
 #' @details
-#' UPM(a,b) = \eqn{(F(b) - F(a))/(b - a)}, defined for an interval (a,b), when X~F().
+#' Unit Probability MASS or UPM(a,b) = \eqn{(F(b) - F(a))/(b - a)}, defined for an interval (a,b), when X~F().
 #' In this function, F() is assumed to be Cumulative Beta distribution function or mixture of two cumulative Beta distribution functions.
-#' If F() consists of a single Beta distribution, and not a mixture, then we must either input \eqn{w = 1} and a1, b1 , or \eqn{w = 0} and a2,b2
-#' @return Unit Probability Mass value or the UPM value
+#' @details
+#' Hence, \eqn{F(x) =  w * pbeta(x, a1, b1) + (1 - w) * pbeta(x, a2, b2)}, pbeta is cumulative Beta distribution
+#' @details
+#' If F() consists of a single Beta distribution, and not a mixture, then the convention here assumed is
+#' to input \eqn{w = 1} and a1, b1 , or \eqn{w = 0} and a2,b2
+#' @return Unit Probability Mass value or the UPM value for the interval (a, b)
+#' @seealso
+#' \code{\link{weights_formulate}}, \code{\link[stats]{Beta}}
 #' @export
 #'
-#' @examples
-#' UPM(w = 1, a = 0.3, b = 0.4, a1 = 2, b1 = 5)
-#' UPM(w = 0, a = 0.3, b = 0.4, a2 = 2, b2 = 5)
-#' UPM(w = 0.3, a = 0.3, b = 0.4, a1 = 3, b1 = 6, a2 = 2, b2 = 5)
+#' @examples UPM(w = 1, a = 0.3, b = 0.4, a1 = 2, b1 = 5)
+#' @examples UPM(w = 0, a = 0.3, b = 0.4, a2 = 2, b2 = 5)
+#' @examples UPM(w = 0.3, a = 0.3, b = 0.4, a1 = 3, b1 = 6, a2 = 2, b2 = 5)
+#' @examples UPM(w = 1, a = 0.3, b = 0.4, a1 = 2, b1 = 5, a2 = 7, b2 = 8) #will give warning
 UPM <- function(w, a = 0, b = 1, a1 = NULL, b1 = NULL, a2 = NULL, b2 = NULL)
 {
   #Checking if the weight value is at most 1 or at least 0
