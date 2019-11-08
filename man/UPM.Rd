@@ -8,9 +8,17 @@ UPM(w, a = 0, b = 1, a1 = NULL, b1 = NULL, a2 = NULL,
   b2 = NULL)
 }
 \arguments{
-\item{w, a1, b1, a2, b2}{Parameters for Prior Distribution. See \code{\link{weights_formulate}} for more information}
+\item{w}{Weight on the first Beta distribution of the mixture Prior}
 
 \item{a, b}{Range Parameters between which UPM is needed to be calculated.}
+
+\item{a1}{alpha parameter ( > 0) for 1st Beta distribution, must be input properly when \eqn{w = 0 or 1}}
+
+\item{b1}{beta parameter ( > 0) for 1st Beta distribution, must be input properly properly when \eqn{w = 0 or 1}}
+
+\item{a2}{alpha parameter ( > 0) for 2nd Beta distribution, will not be used if \eqn{w = 0 or 1}}
+
+\item{b2}{beta parameter ( > 0) for 2nd Beta distribution, will not be used if \eqn{w = 0 or 1}}
 }
 \value{
 Unit Probability Mass value or the UPM value for the interval (a, b)
@@ -22,7 +30,7 @@ Unit Probability Mass value or the UPM value for the interval (a, b)
 Unit Probability MASS or UPM(a,b) = \eqn{(F(b) - F(a))/(b - a)}, defined for an interval (a,b), when X~F().
 In this function, F() is assumed to be Cumulative Beta distribution function or mixture of two cumulative Beta distribution functions.
 
-Hence, \eqn{F(x) =  w * pbeta(x, a1, b1) + (1 - w) * pbeta(x, a2, b2)}, pbeta is cumulative Beta distribution
+Hence, \eqn{F(x) =  w * pbeta(x, a1, b1) + (1 - w) * pbeta(x, a2, b2)}, pbeta is cumulative Beta distribution.
 
 If F() consists of a single Beta distribution, and not a mixture, then the convention here assumed is
 to input \eqn{w = 1} and a1, b1 , or \eqn{w = 0} and a2,b2

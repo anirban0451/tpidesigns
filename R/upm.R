@@ -3,13 +3,13 @@
 #' \code{UPM} calculates Unit Probability Mass for an interval (a, b) when the Underlying distribution is beta or mixture of two beta distributions.
 #' @importFrom stats pbeta
 #' @param a,b Range Parameters between which UPM is needed to be calculated.
-#' @param w,a1,b1,a2,b2 Parameters for Prior Distribution. See \code{\link{weights_formulate}} for more information
+#' @inheritParams weights_formulate
 #'
 #' @details
 #' Unit Probability MASS or UPM(a,b) = \eqn{(F(b) - F(a))/(b - a)}, defined for an interval (a,b), when X~F().
 #' In this function, F() is assumed to be Cumulative Beta distribution function or mixture of two cumulative Beta distribution functions.
 #' @details
-#' Hence, \eqn{F(x) =  w * pbeta(x, a1, b1) + (1 - w) * pbeta(x, a2, b2)}, pbeta is cumulative Beta distribution
+#' Hence, \eqn{F(x) =  w * pbeta(x, a1, b1) + (1 - w) * pbeta(x, a2, b2)}, pbeta is cumulative Beta distribution.
 #' @details
 #' If F() consists of a single Beta distribution, and not a mixture, then the convention here assumed is
 #' to input \eqn{w = 1} and a1, b1 , or \eqn{w = 0} and a2,b2
@@ -108,25 +108,40 @@ UPM <- function(w, a = 0, b = 1, a1 = NULL, b1 = NULL, a2 = NULL, b2 = NULL)
 #' \code{upmplot} Produces a graphical plot of Unit Probability Mass for a given set of parameters.
 #' @importFrom stats dbeta
 #' @import ggplot2
-#' @param x a
-#' @param n b
-#' @param pt c
-#' @param e1 d
-#' @param e2 e
-#' @param design f
-#' @param w g
-#' @param a1 h
-#' @param b1 i
-#' @param a2 j
-#' @param b2 k
+#' @inheritParams weights_formulate
+#' @param pt Target toxicity proportion to achieve in current Dose Level (Less Toxicity means under- dosing, where as more toxicity means over - dosing)
+#' @param e1 Amount of variation that can be allowed to the left of the pt value to conclude that target toxicity has been achieved.
+#' Default value is 0.05
+#' @param e2 Amount of variation that can be allowed to the right of the pt value to conclude that target toxicity has been achieved.
+#' Default value is 0.05
+#' @param design The Design that is implemented in the trials. This arguement includes values "mtpi" and "mmtpi"
 #'
-#' @return A graph that includes Probability Distributions of the Dose Limiting Toxocity Rate.
+#' @return A graph that includes Probability Distributions of the Dose Limiting Toxocity Rate and value of Unit Probability Mass at corresponding intervals.
+#' @inherit UPM details
+#' @section Decision Making Based on UPM values:
+#' For modified Toxicity Probability Interval (mTPI) Design, the toxicity range (0,1) is divided into
+#' three ranges, (1) Under-Dosing Interval [0, pt - e1), (2) Target-Toxicity Interval [pt - e1, pt - e2], (3) Over-Dosing Interval (pt + e2, 1].
+#' UPM is calculated for the the above intervals and Decision is taking accordingly, if the UPM is maximum for interval (1),
+#' then the strength of the current Dosage is escalated, if its maximum for Interval (2), then more patients are administered with
+#' current dose, if the UPM is maximum in interval (3), then strength of the current Dose is de-escalated. For Modified Toxicity Interval Design-2 (mTPI -2, encoded as "mmtpi")
+#' the intervals (1) and (3) are again divided into another sub- intervals and same steps are followed. If the Dosage is severely Toxic, then we
+#' don't use the current level of Dosage for furute administration. Refer to \code{\link{decisiontpi}} to know more.
+#' @seealso
+#' \code{\link{UPM}}, \code{\link{weights_formulate}}
 #' @export
 #'
 #' @examples require(ggplot2)
 #' @examples upmplot(x = 5, n = 7, pt = 0.3, design = "mmtpi", w = 0.1, a1 = 1, a2 = 1, b1 = 4, b2 = 6)
 upmplot <- function(x , n , pt, e1 = 0.05, e2 = 0.05, design = c("mtpi", "mmtpi"), w, a1 = NULL, b1 = NULL, a2 = NULL, b2 = NULL)
 {
+  if(isTRUE(pt > 1 || pt < 0))
+  {
+    stop("Target toxicity Probability should take values between 0 and 1")
+  }
+  if(isTRUE(pt - e1 < 0 || pt + e2 > 1))
+  {
+    stop ("e1 and e2, two thresholds should be small compared to the target probability pt")
+  }
   if (isTRUE(w > 1))
   {
     stop("Weight on informative prior can be at most 1")

@@ -8,35 +8,62 @@ upmplot(x, n, pt, e1 = 0.05, e2 = 0.05, design = c("mtpi", "mmtpi"),
   w, a1 = NULL, b1 = NULL, a2 = NULL, b2 = NULL)
 }
 \arguments{
-\item{x}{a}
+\item{x}{Total Number of events (In Dose Escalation Oncology Trials, this may be defined as
+number of people who have experienced Dose Limiting Toxicities through administration of current Dose Level)}
 
-\item{n}{b}
+\item{n}{Trial size (In Dose Escalation Oncology Trials, this may be defined as
+total number of people who have been administered current Dose Level (missing responses will be excluded). Necessarily n will be greater than or equal to x}
 
-\item{pt}{c}
+\item{pt}{Target toxicity proportion to achieve in current Dose Level (Less Toxicity means under- dosing, where as more toxicity means over - dosing)}
 
-\item{e1}{d}
+\item{e1}{Amount of variation that can be allowed to the left of the pt value to conclude that target toxicity has been achieved.
+Default value is 0.05}
 
-\item{e2}{e}
+\item{e2}{Amount of variation that can be allowed to the right of the pt value to conclude that target toxicity has been achieved.
+Default value is 0.05}
 
-\item{design}{f}
+\item{design}{The Design that is implemented in the trials. This arguement includes values "mtpi" and "mmtpi"}
 
-\item{w}{g}
+\item{w}{Weight on the first Beta distribution of the mixture Prior}
 
-\item{a1}{h}
+\item{a1}{alpha parameter ( > 0) for 1st Beta distribution, must be input properly when \eqn{w = 0 or 1}}
 
-\item{b1}{i}
+\item{b1}{beta parameter ( > 0) for 1st Beta distribution, must be input properly properly when \eqn{w = 0 or 1}}
 
-\item{a2}{j}
+\item{a2}{alpha parameter ( > 0) for 2nd Beta distribution, will not be used if \eqn{w = 0 or 1}}
 
-\item{b2}{k}
+\item{b2}{beta parameter ( > 0) for 2nd Beta distribution, will not be used if \eqn{w = 0 or 1}}
 }
 \value{
-A graph that includes Probability Distributions of the Dose Limiting Toxocity Rate.
+A graph that includes Probability Distributions of the Dose Limiting Toxocity Rate and value of Unit Probability Mass at corresponding intervals.
 }
 \description{
 \code{upmplot} Produces a graphical plot of Unit Probability Mass for a given set of parameters.
 }
+\details{
+Unit Probability MASS or UPM(a,b) = \eqn{(F(b) - F(a))/(b - a)}, defined for an interval (a,b), when X~F().
+In this function, F() is assumed to be Cumulative Beta distribution function or mixture of two cumulative Beta distribution functions.
+
+Hence, \eqn{F(x) =  w * pbeta(x, a1, b1) + (1 - w) * pbeta(x, a2, b2)}, pbeta is cumulative Beta distribution.
+
+If F() consists of a single Beta distribution, and not a mixture, then the convention here assumed is
+to input \eqn{w = 1} and a1, b1 , or \eqn{w = 0} and a2,b2
+}
+\section{Decision Making Based on UPM values}{
+
+For modified Toxicity Probability Interval (mTPI) Design, the toxicity range (0,1) is divided into
+three ranges, (1) Under-Dosing Interval [0, pt - e1), (2) Target-Toxicity Interval [pt - e1, pt - e2], (3) Over-Dosing Interval (pt + e2, 1].
+UPM is calculated for the the above intervals and Decision is taking accordingly, if the UPM is maximum for interval (1),
+then the strength of the current Dosage is escalated, if its maximum for Interval (2), then more patients are administered with
+current dose, if the UPM is maximum in interval (3), then strength of the current Dose is de-escalated. For Modified Toxicity Interval Design-2 (mTPI -2, encoded as "mmtpi")
+the intervals (1) and (3) are again divided into another sub- intervals and same steps are followed. If the Dosage is severely Toxic, then we
+don't use the current level of Dosage for furute administration. Refer to \code{\link{decisiontpi}} to know more.
+}
+
 \examples{
 require(ggplot2)
 upmplot(x = 5, n = 7, pt = 0.3, design = "mmtpi", w = 0.1, a1 = 1, a2 = 1, b1 = 4, b2 = 6)
+}
+\seealso{
+\code{\link{UPM}}, \code{\link{weights_formulate}}
 }
