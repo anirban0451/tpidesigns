@@ -2,39 +2,75 @@
 % Please edit documentation in R/weights_formulate.R
 \name{weights_formulate}
 \alias{weights_formulate}
-\title{Posterior distribution parameters for mixture priors}
+\title{Posterior distribution parameters for mixture priors of Beta distribution}
 \usage{
-weights_formulate(w = 1, x, n, a1 = 1, b1 = 1, a2 = NULL,
+weights_formulate(w = NULL, x, n, a1 = NULL, b1 = NULL, a2 = NULL,
   b2 = NULL)
 }
 \arguments{
-\item{w}{Weight on the informative prior (Distribution coming from a belief)}
+\item{w}{Weight on the first Beta distribution of the mixture Prior}
 
-\item{x}{Total Number of events}
+\item{x}{Total Number of events (In Dose Escalation Oncology Trials, this may be defined as
+number of people who have experienced Dose Limiting Toxicities through administration of current Dose Level)}
 
-\item{n}{Trial size}
+\item{n}{Trial size (In Dose Escalation Oncology Trials, this may be defined as
+total number of people who have been administered current Dose Level (missing responses will be excluded). Necessarily n will be greater than or equal to x}
 
-\item{a1}{alpha parameter for informative distribution, must be input properly when \eqn{w = 0 or 1}}
+\item{a1}{alpha parameter ( > 0) for 1st Beta distribution, must be input properly when \eqn{w = 0 or 1}}
 
-\item{b1}{beta parameter for informative distribution, must be input properly properly when \eqn{w = 0 or 1}}
+\item{b1}{beta parameter ( > 0) for 1st Beta distribution, must be input properly properly when \eqn{w = 0 or 1}}
 
-\item{a2}{alpha parameter for non informative distribution, will not be used if \eqn{w = 0 or 1}}
+\item{a2}{alpha parameter ( > 0) for 2nd Beta distribution, will not be used if \eqn{w = 0 or 1}}
 
-\item{b2}{beta parameter for non informative distribution, will not be used if \eqn{w = 0 or 1}}
+\item{b2}{beta parameter ( > 0) for 2nd Beta distribution, will not be used if \eqn{w = 0 or 1}}
 }
 \value{
-\code{weights}  Weights on posterior distribution components. The first value refers to the weight for informative part of the posterior distribution.
+\code{weights}  Weight on the 1st part of the Posterior Mixture Beta Distribution. When there is only one Beta distribution,
+this value will always return 0 (or 1) , if we pass the value of w as 0 (or 1)
 
-\code{param_inform}  Parameters (alpha, beta) for the informative distribution
+\code{param_inform}  Parameters (alpha, beta) for the 1st Beta distribution. When there is only one prior,
+these values are returned.
 
-\code{param_noninform}  Parameters (alpha, beta) for the non informative distribution
+\code{param_noninform}  Parameters (alpha, beta) for the 2nd Beta distribution. When there is only one prior,
+these values are returned as NULL
 }
 \description{
-\code{weights_formulate} calculates posterior distribution paramters for a Binomial likelihood and mixture Beta prior
+\code{weights_formulate} calculates posterior distribution paramters when a Binomial Likelihood is given and mixture of two Beta distribution
+is taken as prior for the parameter p in the Binomial Distribution
 }
 \details{
-When w takes the value 0 or 1, which implies existence of a single Prior Beta distribution, \code{weights_formulate} by default takes a1 and b1 as model parameters.
+While using the function for Oncology Dose Escalation Trials, w is assumed to be the weight taken on the 1st Prior Distribution of the mixture,
+named as Informative Prior, that is, the Beta Distribution aring from the past studies. Hence, (1 - w)
+represents the weight on the 2nd part of the Beta distribution. When w takes the value 0 or 1(implies exstence of a single Prior Beta distribution),
+\code{weights_formulate} by default takes a1 and b1 as model parameters and ignores a2 and b2.
+
+Let, \code{x|p ~ Binom(n,p) hence, f(x|p) = choose(n, x) * p^x (1 - p)^(n-x)} and \code{ p ~ g(p) = w * dbeta(p, a1, b1) + (1 - w) * dbeta(p, a2, b2)} is the prior for p
+
+Then the unconditional distribution of x is given by,
+
+\eqn{P(X = x) = f(x) = choose(n,x) * [w * (beta(a1 + x, b1 + n - x)/beta(a1, b1)) + (1 - w) * (beta(a2 + x, b2 + n - x)/beta(a2, b2)) ]}
+
+The prior distribution for p becomes,
+
+\eqn{g(p|x) = (f(x | p) * g(p) / f(x)) = w_1 * dbeta(p, a1 + x, b1 + n - x) + (1 - w_1) * dbeta(p, a2 + x, b2 + n - x)}
+
+where, \eqn{w1 = (w * beta(a1 + x , b1 + n - x) / beta(a1, b1))/((w * beta(a1 + x , b1 + n - x) / beta(a1, b1)) + ((1 - w) * beta(a2 + x , b2 + n - x) / beta(a2, b2))) }
+
+Please remember that, dbeta(p, a, b) refers to the pdf of Beta distribution of p with parameters a and b
+, while beta(a,b) gives us the value of beta function with parameters a and b
 }
 \examples{
-weights_formulate(w = 1, x = 1, n = 3, a1 = 1, b1= 1, a2 = 1, b2 = 1)
+weights_formulate(w = 1, x = 1, n = 3, a1 = 1, b1= 1, a2 = 1, b2 = 1) #Will show an warning but return values
+weights_formulate(w = 0.1, x = 1, n = 3, a1 = 1, b1= 1, a2 = 1, b2 = 1)
+}
+\seealso{
+\code{\link[base]{Special}} to know about beta(a,b) function
+
+\code{\link[stats]{Beta}} to know about beta distribution function
+
+\code{\link[stats]{Binomial}} to know about Binomial Distribution function
+
+\url{https://en.wikipedia.org/wiki/Beta-binomial_distribution} to know about Beta Binomial distribution, the unconditional distribution of x
+
+\url{https://www.cancer.gov/publications/dictionaries/cancer-terms/def/dose-limiting} to know about Dose Limiting Toxicity (DLT)
 }
