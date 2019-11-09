@@ -1,20 +1,26 @@
-#' Title
+#' Tabular display of Dose Escalation Decisions
 #'
-#' @param nmax A
-#' @param design B
-#' @param pt C
-#' @param e1 D
-#' @param e2 E
-#' @param eta F
-#' @param w G
-#' @param a1 H
-#' @param b1 T
-#' @param a2 G
-#' @param b2 G
+#' \code{tpitable} gives a table of Dose Escalation Decisions when a certain number of DLT 's  are observed
+#' in different sample size
+#' @param nmax Maximum number of patients to be treated in current level of Dose, must be at least 3
+#' @inheritParams decisiontpi
 #'
-#' @return g
+#' @return A table containing threshold number of DLT 's for Dose Escalation decisions in different cohort size
+#' upto the maximum number of patients allowed for treatment
+#' @details
+#' In Oncology Trials, often the maximum number of people allowed in the treatment is fixed beforehand, and the Dose Escalation
+#' Decision starts from including three patients upto maximum number of patients allowed in the cohort. Hence, the motive of this table
+#' is to create a frame which will be useful when a Clinician working on these type of Trials experiences a certain number of DLT 's in
+#' the sample, he can straightway look at the table and take Dose Escalation Decisions.It is important to note that,
+#' the number of patients in a cohort must be atleast 3, addressed by Continual Reassessment Method
+#' @seealso
+#' \url{https://www.cancer.gov/publications/dictionaries/cancer-terms/def/dose-limiting} for the Definition of Dose Limiting Toxicity\cr
+#' \code{\link{decisiontpi}} to know about Dose Escalation Decision Strategy
 #' @export
 #'
+#' @examples
+#' tpitable(nmax =5, design = "mtpi", pt = 0.3, eta = 0.75, w = 1, a1 = 2, b1 = 3)
+#' tpitable(nmax = 13, design = "mmtpi", pt = 0.4, e1 = 0.06, e2 = 0.04, eta = 0.95, w = 0.4, a1 = 4, b1 = 3, a2 = 1, b2 = 1)
 #'
 tpitable = function(nmax, design, pt, e1 = 0.05, e2 = 0.05, eta, w, a1 = NULL, b1 = NULL, a2 = NULL, b2 = NULL)
 {

@@ -21,6 +21,9 @@
 #' @seealso \code{\link{UPM}} for definition on Unit Probability Mass, \code{\link{upmplot}} for the Decision Making Criterion based on UPM
 #' @export
 #'
+#' @examples n = 13 #must be a value >= 3
+#' @examples x = sample.int(n, 1)
+#' @examples decisiontpi(x = x, n = n, design = "mmtpi", pt = 0.4, e1 = 0.06, e2 = 0.04, eta = 0.95, w = 0.4, a1 = 4, b1 = 3, a2 = 1, b2 = 1)
 #'
 decisiontpi <- function(pt, e1 = 0.05, e2 = 0.05, x, n, eta, design = c("tpi", "mtpi", "mmtpi"), w, a1 = NULL, b1 = NULL, a2 = NULL, b2 = NULL)
 {

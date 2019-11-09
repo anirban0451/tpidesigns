@@ -1,16 +1,13 @@
 Package: tpidesigns
 Title: R-Package to generate Toxicity Probability Interval Dose Escalation Design Results (TPI, mTPI, mTPI - 2)
-Version: 0.0.0.9000
+Version: 1.0.0.9000
 Authors@R: 
     person(given = "Anirban",
            family = "Chakraborty",
            role = c("aut", "cre"),
            email = "anirbanchakraborty@tamu.edu")
 Description: 
-     This Package mainly focuses on Modified Toxicity Interval design proposed by Ji et al (2010)
-     and and Ockham's Razor proposed by Guo et al (2016). Given a total number of patients treated by a drug and number of people experiencing Dose Limiting Toxicities,
-     this Package will find out the Decision to Escalate/ Stay/ De-escalate with the Dose. This package will also be able to generate a table which will tell us about Dose Escalation
-     Decisions given maximum number of patients treated by a Dose. 
+     This Package mainly focuses on Modified Toxicity Interval design proposed by Ji et al (2010) and and Ockham's Razor proposed by Guo et al (2016). Given a total number of patients treated by a drug and number of people experiencing Dose Limiting Toxicities in any Oncology Clinical Trial, this Package will find out the Decision to Escalate/ Stay/ De-escalate with the Dose. This package will also be able to generate a table which will tell us about Dose Escalation Decisions given maximum number of patients treated by a Dose. In addition , this package will also produce a Plot of Unit Probability Mass, a function used in making the Decision Making Criteria for the above mentioned Design and the underlying Posterior Distribution Function.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

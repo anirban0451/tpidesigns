@@ -62,6 +62,8 @@ and hence it is advised to run the \code{\link{decisiontpi}} function to know ab
 
 \examples{
 require(ggplot2)
+n = 13 #must be a value >= 3
+x = sample.int(n, 1)
 upmplot(x = 5, n = 7, pt = 0.3, design = "mmtpi", w = 0.1, a1 = 1, a2 = 1, b1 = 4, b2 = 6)
 }
 \seealso{

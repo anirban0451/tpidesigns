@@ -1,7 +1,7 @@
 #' Calculation of Unit Probability Mass
 #'
 #' \code{UPM} calculates Unit Probability Mass for an interval (a, b) when the Underlying distribution is beta or mixture of two beta distributions.
-#' @importFrom stats pbeta
+#' @import stats
 #' @param a,b Range Parameters between which UPM is needed to be calculated.
 #' @inheritParams weights_formulate
 #'
@@ -106,7 +106,6 @@ UPM <- function(w, a = 0, b = 1, a1 = NULL, b1 = NULL, a2 = NULL, b2 = NULL)
 #' Graphical plot of Unit Probability MASS
 #'
 #' \code{upmplot} Produces a graphical plot of Unit Probability Mass for a given set of parameters.
-#' @importFrom stats dbeta
 #' @import ggplot2
 #' @inheritParams weights_formulate
 #' @param pt Target toxicity proportion to achieve in current Dose Level (Less Toxicity means under- dosing, where as more toxicity means over - dosing)
@@ -131,6 +130,8 @@ UPM <- function(w, a = 0, b = 1, a1 = NULL, b1 = NULL, a2 = NULL, b2 = NULL)
 #' @export
 #'
 #' @examples require(ggplot2)
+#' @examples n = 13 #must be a value >= 3
+#' @examples x = sample.int(n, 1)
 #' @examples upmplot(x = 5, n = 7, pt = 0.3, design = "mmtpi", w = 0.1, a1 = 1, a2 = 1, b1 = 4, b2 = 6)
 upmplot <- function(x , n , pt, e1 = 0.05, e2 = 0.05, design = c("mtpi", "mmtpi"), w, a1 = NULL, b1 = NULL, a2 = NULL, b2 = NULL)
 {

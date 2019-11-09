@@ -55,6 +55,12 @@ Then, probability for these intervals are calculated and the interval for which 
 For mTPI and mTPI-2 (coded as \code{"mmtpi"} in the package), the decision making after ensuring the non-severe toxicity of the current dose level
 is based on the Unit Probability Mass among the Intervals.
 }
+\examples{
+n = 13 #must be a value >= 3
+x = sample.int(n, 1)
+decisiontpi(x = x, n = n, design = "mmtpi", pt = 0.4, e1 = 0.06, e2 = 0.04, eta = 0.95, w = 0.4, a1 = 4, b1 = 3, a2 = 1, b2 = 1)
+
+}
 \seealso{
 \code{\link{UPM}} for definition on Unit Probability Mass, \code{\link{upmplot}} for the Decision Making Criterion based on UPM
 }

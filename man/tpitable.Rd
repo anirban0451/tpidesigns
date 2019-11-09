@@ -2,37 +2,57 @@
 % Please edit documentation in R/tpitable.R
 \name{tpitable}
 \alias{tpitable}
-\title{Title}
+\title{Tabular display of Dose Escalation Decisions}
 \usage{
 tpitable(nmax, design, pt, e1 = 0.05, e2 = 0.05, eta, w, a1 = NULL,
   b1 = NULL, a2 = NULL, b2 = NULL)
 }
 \arguments{
-\item{nmax}{A}
+\item{nmax}{Maximum number of patients to be treated in current level of Dose, must be at least 3}
 
-\item{design}{B}
+\item{design}{Design parameter, tells us which design to use. Options are \code{"tpi", "mtpi", "mmtpi"}}
 
-\item{pt}{C}
+\item{pt}{Target toxicity proportion to achieve in current Dose Level (Less Toxicity means under- dosing, where as more toxicity means over - dosing)}
 
-\item{e1}{D}
+\item{e1}{Amount of variation that can be allowed to the left of the pt value to conclude that target toxicity has been achieved.
+Default value is 0.05}
 
-\item{e2}{E}
+\item{e2}{Amount of variation that can be allowed to the right of the pt value to conclude that target toxicity has been achieved.
+Default value is 0.05}
 
-\item{eta}{F}
+\item{eta}{threshold value to check if the Dose is severely toxic}
 
-\item{w}{G}
+\item{w}{Weight on the first Beta distribution of the mixture Prior}
 
-\item{a1}{H}
+\item{a1}{alpha parameter ( > 0) for 1st Beta distribution, must be input properly when \eqn{w = 0 or 1}}
 
-\item{b1}{T}
+\item{b1}{beta parameter ( > 0) for 1st Beta distribution, must be input properly properly when \eqn{w = 0 or 1}}
 
-\item{a2}{G}
+\item{a2}{alpha parameter ( > 0) for 2nd Beta distribution, will not be used if \eqn{w = 0 or 1}}
 
-\item{b2}{G}
+\item{b2}{beta parameter ( > 0) for 2nd Beta distribution, will not be used if \eqn{w = 0 or 1}}
 }
 \value{
-g
+A table containing threshold number of DLT 's for Dose Escalation decisions in different cohort size
+upto the maximum number of patients allowed for treatment
 }
 \description{
-Title
+\code{tpitable} gives a table of Dose Escalation Decisions when a certain number of DLT 's  are observed
+in different sample size
+}
+\details{
+In Oncology Trials, often the maximum number of people allowed in the treatment is fixed beforehand, and the Dose Escalation
+Decision starts from including three patients upto maximum number of patients allowed in the cohort. Hence, the motive of this table
+is to create a frame which will be useful when a Clinician working on these type of Trials experiences a certain number of DLT 's in
+the sample, he can straightway look at the table and take Dose Escalation Decisions.It is important to note that,
+the number of patients in a cohort must be atleast 3, addressed by Continual Reassessment Method
+}
+\examples{
+tpitable(nmax =5, design = "mtpi", pt = 0.3, eta = 0.75, w = 1, a1 = 2, b1 = 3)
+tpitable(nmax = 13, design = "mmtpi", pt = 0.4, e1 = 0.06, e2 = 0.04, eta = 0.95, w = 0.4, a1 = 4, b1 = 3, a2 = 1, b2 = 1)
+
+}
+\seealso{
+\url{https://www.cancer.gov/publications/dictionaries/cancer-terms/def/dose-limiting} for the Definition of Dose Limiting Toxicity\cr
+\code{\link{decisiontpi}} to know about Dose Escalation Decision Strategy
 }
