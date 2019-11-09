@@ -1,21 +1,24 @@
 #' Dosing Decisions based on different tpi designs
 #'
 #' \code{decisiontpi} gives whether to escalate, stay or de-escalate to a level of Dose given total number of patients and total number of people experiencing toxicities in a cohort
-#' @param pt Target toxicity proportion to achieve in the sample (lower toxicity implies underdosing)
-#' @param e1 Allowable deviation towards the left of target toxicity \code{pt}, usually lies between 0 to 0.05
-#' @param e2 Allowable deviation towards the right of target toxicity \code{pt}, usually lies between 0 to 0.05
-#' @param x Number of patients experiencing DLT (Dose Limiting Toxicity) 's in the cohort
-#' @param n Total number of patients in the cohort
 #' @param eta threshold value to check if the Dose is severely toxic
 #' @param design Design parameter, tells us which design to use. Options are \code{"tpi", "mtpi", "mmtpi"}
-#' @param w weight on the informative prior
-#' @param a1,b1 alpha and beta parameters for informative Beta Prior component
-#' @param a2,b2 alpha and Beta parameters for noninformative Beta Prior component
+#' @inheritParams upmplot
 #' @return
 #' \code{"E"} We should increase the current level of Dose.\cr
 #' \code{"S"} We should stay at the current level of Dose and treat more patients.\cr
 #' \code{"D"} We should decrease the current level of Dose.\cr
-#' \code{"DU"} We should decrease the current level of Dose and we should not go beyond this Dose level for treating more patients\cr
+#' \code{"DU"} We should decrease the current level of Dose and we should not go beyond this Dose level for treating more patients
+#' @details
+#' \code{decisiontpi} checks if the DLT rate within the sample at current Dose level is severely toxic. At first, it calculates the posterior distribution
+#' of the DLT(or, Dose Limiting Toxicity) Rate based on the number of DLT 's in the sample. If the probability is too much (> eta), then the
+#' function returns the value "DU", which implies that the Current Dose level is unacceptably toxic and can't ever be used for further administration.\cr
+#' If the dose is not severely toxic, then it gives us the decision rule based on the design we provide.\cr
+#' If we work with 'tpi' design, then the range of DLT rate, ie, [0,1], is broken up into three intervals, Under-Dosing [0, pt - e1), Target-Toxicity [pt - e1, pt + e2] and Over-Dosing (pt + e2, 1]\cr
+#' Then, probability for these intervals are calculated and the interval for which the probability is high, leads to the Decision- making.\cr
+#' For mTPI and mTPI-2 (coded as \code{"mmtpi"} in the package), the decision making after ensuring the non-severe toxicity of the current dose level
+#' is based on the Unit Probability Mass among the Intervals.
+#' @seealso \code{\link{UPM}} for definition on Unit Probability Mass, \code{\link{upmplot}} for the Decision Making Criterion based on UPM
 #' @export
 #'
 #'

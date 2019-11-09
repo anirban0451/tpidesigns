@@ -53,11 +53,11 @@ to input \eqn{w = 1} and a1, b1 , or \eqn{w = 0} and a2,b2
 
 For modified Toxicity Probability Interval (mTPI) Design, the toxicity range (0,1) is divided into
 three ranges, (1) Under-Dosing Interval [0, pt - e1), (2) Target-Toxicity Interval [pt - e1, pt - e2], (3) Over-Dosing Interval (pt + e2, 1].
-UPM is calculated for the the above intervals and Decision is taking accordingly, if the UPM is maximum for interval (1),
-then the strength of the current Dosage is escalated, if its maximum for Interval (2), then more patients are administered with
-current dose, if the UPM is maximum in interval (3), then strength of the current Dose is de-escalated. For Modified Toxicity Interval Design-2 (mTPI -2, encoded as "mmtpi")
-the intervals (1) and (3) are again divided into another sub- intervals and same steps are followed. If the Dosage is severely Toxic, then we
-don't use the current level of Dosage for furute administration. Refer to \code{\link{decisiontpi}} to know more.
+UPM is calculated for the the above intervals and Decision is taking accordingly,\cr if the UPM is maximum for interval (1),
+then the strength of the current Dosage is escalated,\cr if its maximum for Interval (2), then more patients are administered with
+current dose,\cr if the UPM is maximum in interval (3), then strength of the current Dose is de-escalated.\cr For Modified Toxicity Interval Design-2 (mTPI -2, encoded as "mmtpi")
+the intervals (1) and (3) are again divided into another sub- intervals and same steps are followed.\cr But, before that, we must ensure that the Dose is not severely toxic
+and hence it is advised to run the \code{\link{decisiontpi}} function to know about the severity of current Dose.
 }
 
 \examples{
