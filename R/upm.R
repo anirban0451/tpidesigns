@@ -82,7 +82,7 @@ UPM <- function(w, a = 0, b = 1, a1 = NULL, b1 = NULL, a2 = NULL, b2 = NULL)
   {
     if (isTRUE(total_null > 0))
     {
-      stop("Please input model parameters properly")
+      stop("Please input model parameters for both priors properly")
     }
   }
   #calculating the value
