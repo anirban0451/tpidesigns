@@ -108,8 +108,8 @@ decisiontpi <- function(pt, e1 = 0.05, e2 = 0.05, x, n, eta, design = c("tpi", "
     b1 = params$param_inform[2]
     a2 = params$param_noninform[1]
     b2 = params$param_noninform[2]
-    threshold = w * pbeta(pt, a1 + x, b1 + n - x, lower.tail = FALSE) +
-                         (1 - w) * pbeta(pt, a2 + x, b2 + n - x, lower.tail = FALSE)
+    threshold = w * pbeta(pt, a1, b1, lower.tail = FALSE) +
+                         (1 - w) * pbeta(pt, a2, b2, lower.tail = FALSE)
     if(isTRUE(threshold >= eta)){return("DU")}
   }
 
