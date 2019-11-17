@@ -155,9 +155,10 @@ decisiontpi <- function(pt, e1 = 0.05, e2 = 0.05, x, n, eta, design = c("tpi", "
   }
   else
   {
-    breaks_lower = floor((pt - e1) / 0.1)
-    breaks_upper = floor((1 - pt - e2)  / 0.1)
-    interval = c(0, pt - e1 - 0.1 * (breaks_lower : 0) , pt + e2 + 0.1 * (0 : breaks_upper) , 1)
+    gap = e1 + e2
+    breaks_lower = floor((pt - e1) / gap)
+    breaks_upper = floor((1 - pt - e2)  / gap)
+    interval = c(0, pt - e1 - gap * (breaks_lower : 0) , pt + e2 + gap * (0 : breaks_upper) , 1)
     length_interval = length(interval)
     upm_array = rep(0, length_interval - 1)
 
