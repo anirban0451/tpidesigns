@@ -19,7 +19,7 @@
 #' @export
 #'
 #' @examples
-#' tpitable(nmax =5, design = "mtpi", pt = 0.3, eta = 0.75, w = 1, a1 = 2, b1 = 3)
+#' tpitable(nmax = 5, design = "mtpi", pt = 0.3, eta = 0.75, w = 1, a1 = 2, b1 = 3)
 #' tpitable(nmax = 13, design = "mmtpi", pt = 0.4, e1 = 0.06, e2 = 0.04, eta = 0.95, w = 0.4, a1 = 4, b1 = 3, a2 = 1, b2 = 1)
 #'
 tpitable = function(nmax, design, pt, e1 = 0.05, e2 = 0.05, eta, w, a1 = NULL, b1 = NULL, a2 = NULL, b2 = NULL)

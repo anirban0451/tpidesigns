@@ -48,7 +48,7 @@ the sample, he can straightway look at the table and take Dose Escalation Decisi
 the number of patients in a cohort must be atleast 3, addressed by Continual Reassessment Method
 }
 \examples{
-tpitable(nmax =5, design = "mtpi", pt = 0.3, eta = 0.75, w = 1, a1 = 2, b1 = 3)
+tpitable(nmax = 5, design = "mtpi", pt = 0.3, eta = 0.75, w = 1, a1 = 2, b1 = 3)
 tpitable(nmax = 13, design = "mmtpi", pt = 0.4, e1 = 0.06, e2 = 0.04, eta = 0.95, w = 0.4, a1 = 4, b1 = 3, a2 = 1, b2 = 1)
 
 }

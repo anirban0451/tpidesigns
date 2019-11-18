@@ -110,12 +110,12 @@ decisiontpi <- function(pt, e1 = 0.05, e2 = 0.05, x, n, eta, design = c("tpi", "
     b2 = params$param_noninform[2]
     threshold = w * pbeta(pt, a1, b1, lower.tail = FALSE) +
                          (1 - w) * pbeta(pt, a2, b2, lower.tail = FALSE)
-    if(isTRUE(threshold >= eta)){return("DU")}
+    if(threshold >= eta){return("DU")}
   }
 
 
   #breaking up the domain in compatible ranges according to Professor Yuan Ji 's paper
-  if (design %in% c("tpi", "mtpi"))
+  if (isTRUE(design %in% c("tpi", "mtpi")))
   {
     interval = c(0, pt - e1, pt + e2 , 1)
     length_interval = length(interval)
