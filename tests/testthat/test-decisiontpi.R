@@ -27,6 +27,7 @@ test_that("Warning Check", {
 #                                      #
 # Developing Example for Output Test   #
 ########################################
+set.seed(2)
 n = 16
 pt = runif(1, min = 0.25, max = 0.35)
 e1 = pt - runif(1, min = 0, max = pt)
@@ -57,7 +58,7 @@ if(design %in% c("tpi", "mtpi"))
   cutpoints = c(0, pt - e1 - gap * (breaks_lower : 0) , pt + e2 + gap * (0 : breaks_upper) , 1)
 }
 
-eta = runif(1)
+eta = 0.9
 check_object = decisiontpi(pt = pt, e1 = e1, e2 = e2, x = x, n = n, eta = eta, design = design, w = w, a1 = a1, b1 = b1, a2 = a2, b2 = b2)
 if(check_object == "DU")
 {

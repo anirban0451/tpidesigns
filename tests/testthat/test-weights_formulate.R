@@ -34,7 +34,7 @@ test_that("Output Check", {
                c(7,9))
 })
 
-
+set.seed(2)
 n = 15
 x = sample.int(n, size = 1)
 w = runif(1)
