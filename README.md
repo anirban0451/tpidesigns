@@ -9,6 +9,7 @@ Anirban Chakraborty
       - [1. Updation of Posterior Paramaters](#Updation-of-Posterior-Paramaters)
       - [2. Calculation of Unit Probability Mass](#Calculation-of-Unit-Probability-Mass)
       - [3. Decision Making Based on the number of DLT's](#Decision-Making-Based-on-the-number-of-DLT's)
+      - [4. Graphical Plot of Unit Probability Mass](#Graphical-Plot-of-Unit-Probability-Mass)
       
 
 ## tpidesigns: Introduction
@@ -42,7 +43,7 @@ Essentially,`w, a1, a2, b1, b2` are very crucial parameters for inputting the pr
 
 ### 2\. Calculation of Unit Probability Mass
 
-This function calculates Unit Probability Mass (Refer to [Ji et al(2010)](https://journals.sagepub.com/doi/pdf/10.1177/1740774510382799)) for a particular Interval within the range of Beta distribution.
+The function `UPM` calculates Unit Probability Mass (Refer to [Ji et al(2010)](https://journals.sagepub.com/doi/pdf/10.1177/1740774510382799)) for a particular Interval within the range of Beta distribution.
 
 ``` r
 #generating two random points within (0,1) for the Interval (not important, just for the sake of example)
@@ -55,3 +56,34 @@ UPM(w = wt, a = a_min, b = b_max, a1 = 3, b1 = 6, a2 = 2, b2 = 5)
 It is very important to note that a must be the minimum value in the interval and b must be the maximum value, otherwise the function will not work.
 ### 3\. Decision Making Based on the number of DLT's
 
+When we have information about the number of DLT 's from a sample and we also have information about the prior distribution, then based on the target toxicity proportion (This a proportion of number of DLT 's in the sample assumed by mostly the Clinicians, he says the Dose is working properly when the Posterior mean of DLT proportion equates the assumed proportion) `decisiontpi` takes into account the decision making algorithm for Toxicity Probability Interval designs and gives us the decision for the particular sample. The decisions given are `Escalate (E)`, `Stay(S)`, `De-escalate(D)` and `Unacceptable(DU)`. Sample size must be at least 3.
+
+``` r
+
+n = 10 # sample size
+pt = runif(1, min = 0.25, max = 0.35) #Target toxicity proportion 
+x = sample.int(n, 1) #generating number of DLT 's in a sample
+#Generating a weight value
+wt = runif(1) 
+decisiontpi(x = x, n = n, design = "mmtpi", pt = pt, e1 = 0.06, e2 = 0.04, eta = 0.95,
+w = wt, a1 = 4, b1 = 3, a2 = 1, b2 = 1)
+```
+### 4\. Graphical Plot of DLT proportion
+
+When it is confirmed that the Dose in not unacceptable, i.e. the function `decisiontpi` does not return the value `DU`, then one may want to understand the Posterior distribution of the Toxicity Proportion. `upmplot` takes into account the Decision Theoretic framework and develops the plot of Posterior Distribution of Toxicity Proportion (or DLT proportion). It also plots the values of Unit Probability Mass in different Toxicity Intervals (explained in the documentation). Sample size must be at least 3
+
+```r
+#Simulating some paramaters needed for the plot
+n = 13 #must be a value >= 3
+x = sample.int(n, 1)
+pt = runif(1, min = 0.25, max = 0.35)
+wt = runif(1)
+
+require(ggplot2) #will be imported along with the main package
+#Plotting of Posterior Distribution and UPM for mTPI-2(encoded as "mmtpi" design) design
+upmplot(x = x, n = n, pt = pt, design = "mmtpi", w = wt, a1 = 1, a2 = 1, b1 = 4, b2 = 6) 
+
+#Plotting of Posterior Distribution and UPM for mTPI design
+upmplot(x = x, n = n, pt = pt, design = "mmtpi", w = wt, a1 = 1, a2 = 1, b1 = 4, b2 = 6) 
+
+```
