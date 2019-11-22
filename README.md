@@ -10,6 +10,7 @@ Anirban Chakraborty
       - [2. Calculation of Unit Probability Mass](#Calculation-of-Unit-Probability-Mass)
       - [3. Decision Making Based on the number of DLT's](#Decision-Making-Based-on-the-number-of-DLT's)
       - [4. Graphical Plot of Unit Probability Mass](#Graphical-Plot-of-Unit-Probability-Mass)
+      - [5. A Tabular Display of Dose Escalation Decisions](#A-Tabular-Display-of-Dose-Escalation-Decisions)
       
 
 ## tpidesigns: Introduction
@@ -81,9 +82,25 @@ wt = runif(1)
 
 require(ggplot2) #will be imported along with the main package
 #Plotting of Posterior Distribution and UPM for mTPI-2(encoded as "mmtpi" design) design
-upmplot(x = x, n = n, pt = pt, design = "mmtpi", w = wt, a1 = 1, a2 = 1, b1 = 4, b2 = 6) 
+upmplot(x = x, n = n, pt = pt, , eta = 0.95, design = "mmtpi", w = wt, a1 = 1, a2 = 1, b1 = 4, b2 = 6) 
 
 #Plotting of Posterior Distribution and UPM for mTPI design
-upmplot(x = x, n = n, pt = pt, design = "mmtpi", w = wt, a1 = 1, a2 = 1, b1 = 4, b2 = 6) 
+upmplot(x = x, n = n, pt = pt, eta = 0.95, design = "mmtpi", w = wt, a1 = 1, a2 = 1, b1 = 4, b2 = 6) 
 
+```
+### 5\. A Tabular Display of Dose Escalation Decisions
+
+A person may want to know behaviour of a Drug with the help help of Prior information (encoded in the form of Prior Distribution in the parameters) and sample size, for example, how many DLT 's will allow the Clinician to increase the level of Drug, or how many DLT 's will conclude the current Drug level as unacceptably toxic. `tpitable` gives output for this scenario. When the maximum sample size (>= 3) and Prior information (w, a1, b1, a2, b2) is passed in the code, `tpitable` gives us a table where number of DLT's corresponding to the Decisions (explained in #3.) (more explanation of the Thresholds may be found in the documentation)
+
+```r
+#Simulating some paramaters needed for the table
+nmax = 13 #must be a value >= 3
+pt = runif(1, min = 0.25, max = 0.35)
+wt = runif(1)
+
+#Table for mTPI-2(encoded as "mmtpi" design) design
+tpitable(nmax = nmax, pt = pt, eta = 0.95, design = "mmtpi", w = wt, a1 = 1, a2 = 1, b1 = 4, b2 = 6) 
+
+#Table for mTPI design
+tpitable(x = x, n = n, pt = pt, eta = 0.95, design = "mmtpi", w = wt, a1 = 1, a2 = 1, b1 = 4, b2 = 6) 
 ```
