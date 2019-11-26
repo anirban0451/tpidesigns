@@ -1,0 +1,20 @@
+---
+title: "A manual for tpidesigns package"
+author: "Anirban Chakraborty"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{tpidesigns_vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(tpidesigns)
+```
