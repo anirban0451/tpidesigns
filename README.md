@@ -82,10 +82,10 @@ wt = runif(1)
 
 require(ggplot2) #will be imported along with the main package
 #Plotting of Posterior Distribution and UPM for mTPI-2(encoded as "mmtpi" design) design
-upmplot(x = x, n = n, pt = pt, , eta = 0.95, design = "mmtpi", w = wt, a1 = 1, a2 = 1, b1 = 4, b2 = 6) 
+upmplot(x = x, n = n, pt = pt, design = "mmtpi", w = wt, a1 = 1, a2 = 1, b1 = 4, b2 = 6) 
 
 #Plotting of Posterior Distribution and UPM for mTPI design
-upmplot(x = x, n = n, pt = pt, eta = 0.95, design = "mmtpi", w = wt, a1 = 1, a2 = 1, b1 = 4, b2 = 6) 
+upmplot(x = x, n = n, pt = pt, design = "mtpi", w = wt, a1 = 1, a2 = 1, b1 = 4, b2 = 6) 
 
 ```
 ### 5\. A Tabular Display of Dose Escalation Decisions
@@ -102,5 +102,5 @@ wt = runif(1)
 tpitable(nmax = nmax, pt = pt, eta = 0.95, design = "mmtpi", w = wt, a1 = 1, a2 = 1, b1 = 4, b2 = 6) 
 
 #Table for mTPI design
-tpitable(x = x, n = n, pt = pt, eta = 0.95, design = "mmtpi", w = wt, a1 = 1, a2 = 1, b1 = 4, b2 = 6) 
+tpitable(nmax = nmax, pt = pt, eta = 0.95, design = "mtpi", w = wt, a1 = 1, a2 = 1, b1 = 4, b2 = 6) 
 ```
