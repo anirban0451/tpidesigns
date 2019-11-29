@@ -15,6 +15,131 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+## tpidesigns: Introduction
+
+This package is developed to build decisions based on Toxicity Probability Interval Designs which are very much familiar in Oncology early phase Clinical trials. This package primarily focuses on three designs - TPI, mTPI and mTPI-2. These Decisions are mostly driven by the amount of toxicity proportion suggested by the Clinician for a sample, the Prior Beta distribution (simple/ mixture) and several thresholds. Based on the importance of the particular drug, the Prior Distribution of the Toxicity distribution can change to simple or mixture.For documentation and conformability purpose, Toxicity will be termed as Dose Limiting Toxicity or DLT as per Oncology standard (Definition - [Here](https://www.cancer.gov/publications/dictionaries/cancer-terms/def/dose-limiting))
+
+By building this package, the user is provided with flexibilities to handle the parameters accordingly to find proper decisions in different scenarios. 
+
+## Installation
+
+``` {r installation, echo = FALSE, message = FALSE,results = "hide"}
+devtools::install_github("anirban0451/tpidesigns", INSTALL_opts=c("--no-multiarch"))
+```
+``` {r installation-show, echo = TRUE, eval = FALSE}
+devtools::install_github("anirban0451/tpidesigns")
+```
+
+## Usage
+
+```{r, message = FALSE}
 library(tpidesigns)
+```
+
+### 1\. Updation of Posterior Paramaters
+
+In general, when a person (patient) is treated in Clinical Trials, his likelihood of developing DLT follows a Bernoulli Distribution and for a sample of more than one people, this likelihood will follow Binomial Distribution (Each patients independently may or may not develop DLT, so the number of DLT ' s in a sample will follow Binomial distribution, [Learn](https://en.wikipedia.org/wiki/Bernoulli_distribution#Related_distributions) more). `weights_formulate` takes into account the Binomial likelihood and the Prior distribution and hence develop the posterior distribution paramaters. 
+
+In general, if X denotes the number of DLT' s in a sample of size n with DLT probability parameter $pt$, and, if we take a prior distribution on pt, which is a mixture of two Beta distribution, i.e,
+$$
+f_X(x;n,pt) = \binom{n}{x}pt ^x (1 - pt) ^ {n - x}, x = 0, 1, 2, \dots n\\
+g_{pt}(p;w,a_1,b_1,a_2,b_2) = w  \frac{1}{Beta(a_1,b_1)} p ^ {a_1 - 1} (1 - p) ^{b_1 - 1} + (1 - w)  \frac{1}{Beta(a_2,b_2)} p ^ {a_2 - 1} (1 - p) ^{b_2 - 1} 
+$$
+
+where, $w$ is the weight on first component of mixture distribution. Under the assumption of aforementioned distributions, the posterior distribution looks like following.
+$$
+g_{pt}(p|x) = w_1  \frac{1}{Beta(a^\prime_1,b^\prime_1)} p ^ {a^\prime_1 - 1} (1 - p) ^{b^\prime_1 - 1} + (1 - w_1)  \frac{1}{Beta(a^\prime_2,b^\prime_2)} p ^ {a^\prime_2 - 1} (1 - p) ^{b^\prime_2 - 1};\\
+a^\prime_i = a_i + x, i = 1,2;\\
+b^\prime_i = b_i + n - x, i = 1,2;\\
+w_1 = \frac{w  \frac{Beta(a^\prime_1,b^\prime_1)}{Beta(a_1,b_1)}}{w \frac{Beta(a^\prime_1,b^\prime_1)}{Beta(a_1,b_1)} + (1 - w)  \frac{Beta(a^\prime_2,b^\prime_2)}{Beta(a_2,b_2)}}
+$$
+
+`weights_formulate` generates the values of $w_1, a^\prime_1, b^\prime_1, a^\prime_2, b^\prime_2$ in the form of a list. 
+
+```{r posterior beta}
+set.seed(2)
+wt = runif(1) #generates a random weight on the first part of the prior distribution
+params_updated = weights_formulate(w = wt, x = 1, n = 3, a1 = 1, b1= 1, a2 = 3, b2 = 5)
+print(params_updated)
+```
+
+So,`w, a1, a2, b1, b2` are very crucial parameters for inputting the priors. In special scenarios, when there is only one prior, w should be input as either of 0 or 1, and only a1 and b1 should be input. Otherwise, a warning will show up.
+
+### 2\. Calculation of Unit Probability Mass
+
+The function `UPM` calculates Unit Probability Mass (Refer to [Ji et al(2010)](https://journals.sagepub.com/doi/pdf/10.1177/1740774510382799)) for a particular Interval within the range of Beta distribution.
+
+Suppose, a random variable $X \sim F(x), X\in[P,Q]$. The Unit Probability Mass is defined as, $ UPM(a, b) = \frac{F(b) - F(a)}{b - a}$
+
+```{r upm}
+set.seed(2)
+#generating two random points within (0,1) for the Interval (not important, just for the sake of example)
+interval = runif(2, min = 0 , max = 1)
+a_min =  min(interval); b_max = max(interval)
+#Generating a weight value
+wt = runif(1) 
+UPM(w = wt, a = a_min, b = b_max, a1 = 3, b1 = 6, a2 = 2, b2 = 5)
+```
+It is very important to note that a must be the minimum value in the interval and b must be the maximum value, otherwise the function will not work.
+
+For the Oncology Dose Escalation Studies, if the Toxicity Probability Interval designs are used to find the correct decision, they are solely based on these UPM values, provided the Doses are not severely toxic. In the latter case, the following function will be used.
+
+### 3\. Decision Making Based on the number of DLT's
+
+When we have information about the number of DLT 's from a sample and the prior distribution, then based on the target toxicity proportion (This a proportion of number of DLT 's in the sample assumed by mostly the Clinicians, he says the Dose is working properly when the Posterior mean of DLT proportion equates or falls very close to the assumed proportion) `decisiontpi` takes into account the decision making algorithm for Toxicity Probability Interval designs and gives us the decision for the particular sample. The decisions given are `Escalate (E)`, `Stay(S)`, `De-escalate(D)` and `Unacceptable(DU)`. Sample size must be at least 3 as per Clinical Trials standard.
+
+``` {r decision-making}
+set.seed(5003)
+n = 10 # sample size
+pt = runif(1, min = 0.25, max = 0.35) #Target toxicity proportion 
+x = sample.int(n, 1) #generating number of DLT 's in a sample
+#Generating a weight value
+wt = runif(1) 
+decisiontpi(x = x, n = n, design = "mtpi", pt = pt, e1 = 0.06, e2 = 0.04, eta = 0.95,
+w = wt, a1 = 4, b1 = 3, a2 = 1, b2 = 1)
+decisiontpi(x = x, n = n, design = "mmtpi", pt = pt, e1 = 0.06, e2 = 0.04, eta = 0.95,
+w = wt, a1 = 4, b1 = 3, a2 = 1, b2 = 1)
+```
+
+Based on the threshold value eta, this function first checks whether the current dose is unacceptably toxic. If it is not unacceptably toxic, then the overall performance of the Dose is explained by a plot which contains the information on Posterior Distribution and UPM, the deciding factor of the decision- making. The plot is explained below.
+
+* Why plot UPM, when already decisiontpi is present?
+
+This is actually a great argument because `decisiontpi` in general calculates the values which are represented by the function `upmplot`. However, `decisiontpi` does not show how close the UPM values are. Also, in 'mtpi' design, the Interval lengths are too high which is relatively low in case of mtpi, which results in a change of Decision for sensitive studies. Looking at this Graph will help people understand the correct design by judging the closeness of the UPM values. Moreover, `decisiontpi` does not display the overall posterior deistribution where `upmplot` will be useful.
+
+### 4\. Graphical Plot of DLT proportion
+
+When it is confirmed that the Dose in not unacceptable, i.e. the function `decisiontpi` does not return the value `DU`, then one may want to understand the Posterior distribution of the Toxicity Proportion. `upmplot` takes into account the Decision Theoretic framework and develops the plot of Posterior Distribution of Toxicity Proportion (or DLT proportion). It also plots the values of Unit Probability Mass in different Toxicity Intervals (explained in the documentation). Sample size must be at least 3.
+
+```{r, tidy = TRUE, fig.width = 6}
+set.seed(5003)
+#Simulating some paramaters needed for the plot
+n = 10 #must be a value >= 3
+x = sample.int(n, 1)
+pt = runif(1, min = 0.25, max = 0.35)
+wt = runif(1)
+
+#Plotting of Posterior Distribution and UPM for mTPI-2(encoded as "mmtpi" design) design
+upmplot(x = x, n = n, pt = pt, design = "mtpi", e1 = 0.06, e2 = 0.04, w = wt, a1 = 4, b1 = 3, a2 = 1, b2 = 1) 
+
+```
+
+From the graph, the correct decision can be properly identified. However, if the function `decisiontpi` returns the value `"DU"`, then this graph becomes pointless.
+
+
+### 5\. A Tabular Display of Dose Escalation Decisions
+
+A person may want to know behaviour of a Drug with the help of Prior information (encoded in the form of Prior Distribution in the parameters) and sample size, for example, how many DLT 's will allow the Clinician to increase the level of Drug, or how many DLT 's will conclude the current Drug level as unacceptably toxic. `tpitable` gives output for this scenario. When the maximum sample size (>= 3) and Prior information (w, a1, b1, a2, b2) is passed in the code, `tpitable` gives us a table where number of DLT's corresponding to the Decisions (explained in #3.) (more explanation of the Thresholds may be found in the documentation)
+
+```{r tpitab}
+#Simulating some paramaters needed for the table
+set.seed(2)
+
+nmax = 5 #must be a value >= 3
+pt = runif(1, min = 0.25, max = 0.35)
+wt = runif(1)
+
+
+#Table for mTPI design
+tpitable(nmax = nmax, pt = pt, eta = 0.95, design = "mtpi", w = wt, a1 = 1, a2 = 1, b1 = 4, b2 = 6) 
 ```
