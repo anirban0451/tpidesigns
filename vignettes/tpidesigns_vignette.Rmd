@@ -66,7 +66,7 @@ So,`w, a1, a2, b1, b2` are very crucial parameters for inputting the priors. In 
 
 The function `UPM` calculates Unit Probability Mass (Refer to [Ji et al(2010)](https://journals.sagepub.com/doi/pdf/10.1177/1740774510382799)) for a particular Interval within the range of Beta distribution.
 
-Suppose, a random variable $X \sim F(x), X\in[P,Q]$. The Unit Probability Mass is defined as, $ UPM(a, b)$ = $\frac{F(b) - F(a)}{b - a}$
+Suppose, a random variable $X \sim F(x), X\in[P,Q]$. The Unit Probability Mass is defined as,UPM(a, b) = $\frac{F(b) - F(a)}{b - a}$
 
 ```{r upm}
 set.seed(2)
