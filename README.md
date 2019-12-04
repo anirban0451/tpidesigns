@@ -22,7 +22,7 @@ By building this package, the user is provided with flexibilities to handle the 
 ## Installation
 
 ``` r
-devtools::install_github("anirban0451/tpidesigns")
+devtools::install_github("anirban0451/tpidesigns", build_vignettes = TRUE, build_opts = c("--no-resave-data", "--no-manual"))
 ```
 
 ## Usage

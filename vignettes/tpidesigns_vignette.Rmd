@@ -23,8 +23,8 @@ By building this package, the user is provided with flexibilities to handle the 
 
 ## Installation
 
-``` {r installation-show, echo = TRUE, message = FALSE, eval = F}
-devtools::install_github("anirban0451/tpidesigns")
+``` {r installation-show, tidy = TRUE, echo = TRUE, message = FALSE, eval = F}
+devtools::install_github("anirban0451/tpidesigns", build_vignettes = TRUE, build_opts = c("--no-resave-data", "--no-manual"))
 ```
 
 ## Usage
