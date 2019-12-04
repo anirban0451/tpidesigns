@@ -11,10 +11,10 @@ decisiontpi(pt, e1 = 0.05, e2 = 0.05, x, n, eta, design = c("tpi",
 \item{pt}{Target toxicity proportion to achieve in current Dose Level (Less Toxicity means under- dosing, where as more toxicity means over - dosing)}
 
 \item{e1}{Amount of variation that can be allowed to the left of the pt value to conclude that target toxicity has been achieved.
-Default value is 0.05}
+Default value is 0.05. This means, that if a Posterior Toxicity (DLT) mean takes a value within the range (pt - e1, pt), toxicity for the cohort (of size >= 3) will be achieved.}
 
 \item{e2}{Amount of variation that can be allowed to the right of the pt value to conclude that target toxicity has been achieved.
-Default value is 0.05}
+Default value is 0.05. This means, that if a Posterior Toxicity (DLT) mean takes a value within the range (pt, pt + e2), toxicity for the cohort (of size >= 3) will be achieved.}
 
 \item{x}{Total Number of events (In Dose Escalation Oncology Trials, this may be defined as
 number of people who have experienced Dose Limiting Toxicities through administration of current Dose Level)}
@@ -58,9 +58,10 @@ is based on the Unit Probability Mass among the Intervals.
 \examples{
 n = 13 #must be a value >= 3
 x = sample.int(n, 1)
-decisiontpi(x = x, n = n, design = "mmtpi", pt = 0.4, e1 = 0.06, e2 = 0.04, eta = 0.95, w = 0.4, a1 = 4, b1 = 3, a2 = 1, b2 = 1)
+decisiontpi(x = x, n = n, design = "mmtpi", pt = 0.4, e1 = 0.06, e2 = 0.04, eta = 0.95,
+ w = 0.4, a1 = 4, b1 = 3, a2 = 1, b2 = 1)
 
 }
 \seealso{
-\code{\link{UPM}} for definition on Unit Probability Mass, \code{\link{upmplot}} for the Decision Making Criterion based on UPM
+\code{\link{UPM}} for definition on Unit Probability Mass, \code{\link{upmplot}} for graphical Display of the Decision Making Criterion based on UPM
 }

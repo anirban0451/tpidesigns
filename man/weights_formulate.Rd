@@ -36,7 +36,7 @@ these values are returned as NULL
 }
 \description{
 \code{weights_formulate} calculates posterior distribution paramters when a Binomial Likelihood is given and mixture of two Beta distribution
-is taken as prior for the parameter p in the Binomial Distribution
+is taken as prior for the parameter pt in the Binomial Distribution
 }
 \details{
 While using the function for Oncology Dose Escalation Trials, w is assumed to be the weight taken on the 1st Prior Distribution of the mixture,
@@ -60,7 +60,8 @@ Please remember that, dbeta(p, a, b) refers to the pdf of Beta distribution of p
 , while beta(a,b) gives us the value of beta function with parameters a and b
 }
 \examples{
-weights_formulate(w = 1, x = 1, n = 3, a1 = 1, b1= 1, a2 = 1, b2 = 1) #Will show an warning but return values
+weights_formulate(w = 1, x = 1, n = 3, a1 = 1, b1= 1,
+a2 = 1, b2 = 1) #Will show an warning but return values
 weights_formulate(w = 0.1, x = 1, n = 3, a1 = 1, b1= 1, a2 = 1, b2 = 1)
 }
 \seealso{

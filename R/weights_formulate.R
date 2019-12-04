@@ -1,7 +1,7 @@
 #' Posterior distribution parameters for mixture priors of Beta distribution
 #'
 #' \code{weights_formulate} calculates posterior distribution paramters when a Binomial Likelihood is given and mixture of two Beta distribution
-#' is taken as prior for the parameter p in the Binomial Distribution
+#' is taken as prior for the parameter pt in the Binomial Distribution
 #'
 #' @param w Weight on the first Beta distribution of the mixture Prior
 #' @param x Total Number of events (In Dose Escalation Oncology Trials, this may be defined as
@@ -52,7 +52,8 @@
 #'
 #' @export
 #'
-#' @examples weights_formulate(w = 1, x = 1, n = 3, a1 = 1, b1= 1, a2 = 1, b2 = 1) #Will show an warning but return values
+#' @examples weights_formulate(w = 1, x = 1, n = 3, a1 = 1, b1= 1,
+#' a2 = 1, b2 = 1) #Will show an warning but return values
 #' @examples weights_formulate(w = 0.1, x = 1, n = 3, a1 = 1, b1= 1, a2 = 1, b2 = 1)
 weights_formulate = function(w = NULL, x, n, a1 = NULL, b1= NULL, a2 = NULL, b2 = NULL)
 {

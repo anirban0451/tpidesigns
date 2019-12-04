@@ -1,6 +1,6 @@
 Package: tpidesigns
 Title: R-Package to generate Toxicity Probability Interval Dose Escalation Design Results (TPI, mTPI, mTPI - 2)
-Version: 1.0.0.9000
+Version: 1.0.0
 Authors@R: 
     person(given = "Anirban",
            family = "Chakraborty",

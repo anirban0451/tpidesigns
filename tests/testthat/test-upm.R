@@ -1,3 +1,7 @@
+##################################################################
+#Checking Error for the model parameter inputs, w, a1, a2, b1, b2#
+##################################################################
+
 
 test_that("Error Check", {
   expect_error(UPM(w = 0.5, a1 = NULL, b1= 1, a2 = 2, b2 = 4),
@@ -10,9 +14,20 @@ test_that("Error Check", {
 })
 
 test_that("Error Check", {
-  expect_error(UPM(w = - 10^-5, a1 = NULL, b1= 1, a2 = 2, b2 = 4),
+  expect_error(UPM(w = - 10^-0.005, a1 = NULL, b1= 1, a2 = 2, b2 = 4),
                "w is weight taken on first prior (informative), which can lie between 0 and 1", fixed = TRUE)
 })
+
+test_that("Error Check", {
+  expect_error(UPM(w = 0.1, a1 = 2, b2 = 4),
+               "Please input model parameters for both priors properly")
+})
+
+
+
+####################################################################
+#Checking Warning for the model parameter inputs, w, a1, a2, b1, b2#
+####################################################################
 
 test_that("Warning Message Check", {
   expect_warning(UPM(w = 1, a1 = 5, b1= 1, a2 = 2, b2 = 4),
@@ -20,6 +35,9 @@ test_that("Warning Message Check", {
 })
 
 
+##############################################################################
+# Checking output and warning simultaneously, to make sure output is working #
+##############################################################################
 
 check_object = evaluate_promise(UPM(w = 0, a = 0.2, b = 0.8, a2 = 2, b2 = 4))
 test_that("Warning Message Check", {
@@ -27,7 +45,10 @@ test_that("Warning Message Check", {
                  "You should put the parameter values for a1 and b1 instead of a2 and b2")
 })
 
+
+#This will create the desired value, it will be used for check
 check_value = (pbeta(0.8, 2, 4) - pbeta(0.2, 2, 4)) / (0.8 - 0.2)
+
 test_that("Output Check", {
   expect_equal(check_object$result,
                 check_value , tol = 1^-14)
@@ -37,15 +58,10 @@ remove(check_object)
 
 
 
-test_that("Error Check", {
-  expect_error(UPM(w = 0.1, a1 = 2, b2 = 4),
-               "Please input model parameters for both priors properly")
-})
 
-test_that("Error Check", {
-  expect_error(UPM(w = 0.1, a1 = 2, b2 = 4),
-               "Please input model parameters for both priors properly")
-})
+##############################################################################
+# Checking output and warning simultaneously, to make sure output is working #
+##############################################################################
 
 
 check_object = evaluate_promise(UPM(w = 0.1, a = -0.3, b = 0.7, a1 = 2, b1 = 6, a2 = 4, b2 = 4))
@@ -64,3 +80,6 @@ test_that("Output Check", {
   expect_equal(check_object$result,
               upm_value_check, tol = 10^-14)
 })
+
+
+#upmplot hasn't been tested, because it heavily depends on UPM() and decisiontpi()

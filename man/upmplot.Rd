@@ -17,10 +17,10 @@ total number of people who have been administered current Dose Level (missing re
 \item{pt}{Target toxicity proportion to achieve in current Dose Level (Less Toxicity means under- dosing, where as more toxicity means over - dosing)}
 
 \item{e1}{Amount of variation that can be allowed to the left of the pt value to conclude that target toxicity has been achieved.
-Default value is 0.05}
+Default value is 0.05. This means, that if a Posterior Toxicity (DLT) mean takes a value within the range (pt - e1, pt), toxicity for the cohort (of size >= 3) will be achieved.}
 
 \item{e2}{Amount of variation that can be allowed to the right of the pt value to conclude that target toxicity has been achieved.
-Default value is 0.05}
+Default value is 0.05. This means, that if a Posterior Toxicity (DLT) mean takes a value within the range (pt, pt + e2), toxicity for the cohort (of size >= 3) will be achieved.}
 
 \item{design}{The Design that is implemented in the trials. This arguement includes values "mtpi" and "mmtpi"}
 
@@ -57,7 +57,7 @@ UPM is calculated for the the above intervals and Decision is taking accordingly
 then the strength of the current Dosage is escalated,\cr if its maximum for Interval (2), then more patients are administered with
 current dose,\cr if the UPM is maximum in interval (3), then strength of the current Dose is de-escalated.\cr For Modified Toxicity Interval Design-2 (mTPI -2, encoded as "mmtpi")
 the intervals (1) and (3) are again divided into another sub- intervals and same steps are followed.\cr But, before that, we must ensure that the Dose is not severely toxic
-and hence it is advised to run the \code{\link{decisiontpi}} function to know about the severity of current Dose.
+and hence it is advised to run the \code{\link{decisiontpi}} function to know about the severity of current Dose.The graphical display will be meaningful only if \code{\link{decisiontpi}} does not return the value "DU"
 }
 
 \examples{

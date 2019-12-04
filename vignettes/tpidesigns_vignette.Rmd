@@ -79,7 +79,7 @@ UPM(w = wt, a = a_min, b = b_max, a1 = 3, b1 = 6, a2 = 2, b2 = 5)
 ```
 It is very important to note that a must be the minimum value in the interval and b must be the maximum value, otherwise the function will not work.
 
-For the Oncology Dose Escalation Studies, if the Toxicity Probability Interval designs are used to find the correct decision, they are solely based on these UPM values, provided the Doses are not severely toxic. In the latter case, the following function will be used.
+For the Oncology Dose Escalation Studies, if the Toxicity Probability Interval designs are used to find the correct decision, they are solely based on these UPM values, provided the Doses are not severely toxic.
 
 ### 3\. Decision Making Based on the number of DLT's
 
@@ -98,11 +98,29 @@ decisiontpi(x = x, n = n, design = "mmtpi", pt = pt, e1 = 0.06, e2 = 0.04, eta =
 w = wt, a1 = 4, b1 = 3, a2 = 1, b2 = 1)
 ```
 
-Based on the threshold value eta, this function first checks whether the current dose is unacceptably toxic. If it is not unacceptably toxic, then the overall performance of the Dose is explained by a plot which contains the information on Posterior Distribution and UPM, the deciding factor of the decision- making. The plot is explained below.
+Based on the threshold value eta, this function first checks whether the current dose is unacceptably toxic. If it is not unacceptably toxic, then the overall performance of the Dose is explained by a plot which contains the information on Posterior Distribution and UPM, the deciding factor of the decision- making. 
+
+* How UPM is used to understand the correct decision?
+
+The Toxicity Proportion Range, which is (0,1), is divided into several small Intervals.
+
+For mTPI: The Range is Broken into three Intervals ,(1) Under-Dosing (pt - e1), (2) Target Toxicity Interval [pt - e1, pt + e2], (3) Over Dosing (pt + e2, 1)
+
+For mTPI-2: The Under-Dosing and Over-Dosing Ranges are broken into several small sub intervals.
+
+UPM value is checked for all the Intervals and then highest UPM-interval is the winner. Based on the category of the Interval, the design is made.
+
+Under-dosing leads to Escalating the Dose level.
+
+Target Toxicity leads to Staying at the current Dose.
+
+Over-dosing leads to De-escalating the current Dose level.
+
+To know more about pt, e1, e2 and other options, please visit the help page by searching `?decisiontpi`
 
 * Why plot UPM, when already decisiontpi is present?
 
-This is actually a great argument because `decisiontpi` in general calculates the values which are represented by the function `upmplot`. However, `decisiontpi` does not show how close the UPM values are. Also, in 'mtpi' design, the Interval lengths are too high which is relatively low in case of mtpi, which results in a change of Decision for sensitive studies. Looking at this Graph will help people understand the correct design by judging the closeness of the UPM values. Moreover, `decisiontpi` does not display the overall posterior deistribution where `upmplot` will be useful.
+This is actually a great argument because `decisiontpi` in general calculates the values which are represented by the function `upmplot`. However, `decisiontpi` does not show how close the UPM values are. Also, in 'mtpi' design, the Interval lengths are too high while they are comparatively low in "mtpi-2", which results in a change of Decision for sensitive studies. Looking at this Graph will help people understand the correct design by judging the closeness of the UPM values. Judgement of Correct design is not always determined by the UPM values and their closenesses, but also by the persons involved in the study, so that, they can understand the sensitivity of the study. Moreover, `decisiontpi` does not display the overall posterior deistribution where `upmplot` will be useful.
 
 ### 4\. Graphical Plot of DLT proportion
 
@@ -121,7 +139,7 @@ upmplot(x = x, n = n, pt = pt, design = "mtpi", e1 = 0.06, e2 = 0.04, w = wt, a1
 
 ```
 
-From the graph, the correct decision can be properly identified. However, if the function `decisiontpi` returns the value `"DU"`, then this graph becomes pointless.
+From the graph, the correct decision can be properly identified, which is - 'Stay' at current Dose. However, if the function `decisiontpi` returns the value `"DU"`, then this graph becomes pointless.
 
 
 ### 5\. A Tabular Display of Dose Escalation Decisions
@@ -140,3 +158,5 @@ wt = runif(1)
 #Table for mTPI design
 tpitable(nmax = nmax, pt = pt, eta = 0.95, design = "mtpi", w = wt, a1 = 1, a2 = 1, b1 = 4, b2 = 6) 
 ```
+
+So, this table gives us information about how the Dose Escalating Decisions should look like, when n (<= namx) people are treated with a certain level of Dose.

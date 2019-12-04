@@ -1,3 +1,8 @@
+#####################################################
+# Testing Errors and Warning son all the parameters #
+#####################################################
+
+
 test_that("Error Check", {
   expect_error(decisiontpi(pt = 0.3, e1 = 0.35, e2 = 0.05, x = 4 , n = 6, eta = 0.2, design = c("tpi", "mtpi", "mmtpi"), w = 0.2, a1 = 4, b1 = 5, a2 = 6, b2 = 7),
                "e1 and e2, two thresholds should be small compared to the target probability pt")
@@ -23,9 +28,12 @@ test_that("Warning Check", {
                "You should put the parameter values for a1 and b1 instead of a2 and b2", fixed = TRUE)
 })
 
+
+
 ########################################
 #                                      #
 # Developing Example for Output Test   #
+#                                      #
 ########################################
 set.seed(2)
 n = 16

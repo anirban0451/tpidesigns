@@ -15,10 +15,10 @@ tpitable(nmax, design, pt, e1 = 0.05, e2 = 0.05, eta, w, a1 = NULL,
 \item{pt}{Target toxicity proportion to achieve in current Dose Level (Less Toxicity means under- dosing, where as more toxicity means over - dosing)}
 
 \item{e1}{Amount of variation that can be allowed to the left of the pt value to conclude that target toxicity has been achieved.
-Default value is 0.05}
+Default value is 0.05. This means, that if a Posterior Toxicity (DLT) mean takes a value within the range (pt - e1, pt), toxicity for the cohort (of size >= 3) will be achieved.}
 
 \item{e2}{Amount of variation that can be allowed to the right of the pt value to conclude that target toxicity has been achieved.
-Default value is 0.05}
+Default value is 0.05. This means, that if a Posterior Toxicity (DLT) mean takes a value within the range (pt, pt + e2), toxicity for the cohort (of size >= 3) will be achieved.}
 
 \item{eta}{threshold value to check if the Dose is severely toxic}
 
@@ -49,7 +49,8 @@ the number of patients in a cohort must be atleast 3, addressed by Continual Rea
 }
 \examples{
 tpitable(nmax = 5, design = "mtpi", pt = 0.3, eta = 0.75, w = 1, a1 = 2, b1 = 3)
-tpitable(nmax = 13, design = "mmtpi", pt = 0.4, e1 = 0.06, e2 = 0.04, eta = 0.95, w = 0.4, a1 = 4, b1 = 3, a2 = 1, b2 = 1)
+tpitable(nmax = 13, design = "mmtpi", pt = 0.4, e1 = 0.06, e2 = 0.04, eta = 0.95,
+ w = 0.4, a1 = 4, b1 = 3, a2 = 1, b2 = 1)
 
 }
 \seealso{

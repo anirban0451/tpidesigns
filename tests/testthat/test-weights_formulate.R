@@ -1,3 +1,7 @@
+##################################################################
+#Checking Error for the model parameter inputs, w, a1, a2, b1, b2#
+##################################################################
+
 test_that("Error Check", {
   expect_error(weights_formulate(w = 0.5, x = 5, n = 10, a1 = NULL, b1= 1, a2 = 2, b2 = 4),
                         "Please input model parameters  for both priors properly")
@@ -13,6 +17,20 @@ test_that("Error Check", {
                "Weight on a prior can not be negative")
 })
 
+
+test_that("Error Check", {
+  expect_error(weights_formulate(w = 0.1, x = 5, n = 10, a1 = 2, b2 = 4),
+               "Please input model parameters  for both priors properly")
+})
+
+
+
+
+
+####################################################################
+#Checking Warning for the model parameter inputs, w, a1, a2, b1, b2#
+####################################################################
+
 test_that("Warning Message Check", {
   expect_warning(weights_formulate(w = 1, x = 5, n = 10, a1 = 5, b1= 1, a2 = 2, b2 = 4),
                  "Check inputs for prior parameters, taking a1 and b1 as original parameters")
@@ -23,10 +41,12 @@ test_that("Warning Message Check", {
                  "You should put the parameter values for a1 and b1 instead of a2 and b2")
 })
 
-test_that("Error Check", {
-  expect_error(weights_formulate(w = 0.1, x = 5, n = 10, a1 = 2, b2 = 4),
-               "Please input model parameters  for both priors properly")
-})
+
+
+
+#######################################
+# Checking Output in general framework#
+#######################################
 
 
 test_that("Output Check", {
